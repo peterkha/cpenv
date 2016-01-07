@@ -1,0 +1,8 @@
+--exclude=pancam/*
+--exclude=*AmbaRelease_21-evk/* 
+--exclude=*AmbaRelease_21-2-evk/* 
+--exclude=*20140422_new_src_SD_boot/* 
+--exclude=*20140603_fw_May_29_2014/* 
+--exclude=*usbx_host_controllers/* 
+--exclude=*usbx_device_controllers/* 
+--exclude=.git 

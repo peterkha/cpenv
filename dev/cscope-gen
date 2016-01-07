@@ -1,0 +1,15 @@
+#!/bin/sh
+
+find ~/dev/pancam/hardware -name '*.py' \
+       -o -name '*.java' \
+       -o -iname '*.[CH]' \
+       -o -name '*.cpp' \
+       -o -name '*.cc' \
+       -o -name '*.hpp'  \
+       > ~/dev/cscope/cscope.files
+
+cd ~/dev/cscope
+# -b: just build
+# -q: create inverted index
+       cscope -b -q
+cd -
