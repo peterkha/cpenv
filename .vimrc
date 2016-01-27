@@ -65,6 +65,14 @@ au VimLeavePre * call SaveAndCloseSession()
 "endfunction
 
 
+
+""""""""" cscope quickfix """""""""
+
+" use :cn and :cp to move between tags when working with cscope result list
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+
+
 """"""""" default directory """"""""""
 :cd ~/dev/
 
@@ -352,13 +360,13 @@ map <c-v> "+p
 
 "map <C-S-e> :tabe ~/.wine/drive_c/winepath.txt<CR>v-gf<C-o>:bd<CR>
 "map <C-S-e> :tabe ~/temp/winepath.txt<CR>v-gf:bp<bar>bp<bar>sp<bar>bn<bar>bd<CR>
-"map <M-e> :tabe ~/temp/winepath.txt<CR>v-gf<C-b>winepath<CR>:Kwbd<CR>
+map <C-S-E> :tabe ~/temp/winepath.txt<CR>v-gf<C-b>winepath<CR>:Kwbd<CR>
 
 
 map <M-S-l> :bd!<CR>
 
 
-"nmap <M-a> :tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
+nmap <M-a> :tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
 "vmap <C-S-a> <c-c>:tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
 
 map <M-s> <C-\>s
@@ -393,8 +401,8 @@ map <leader>t :HighlightTags<CR>
 
 map <leader>b :execute CloseHiddenBuffers()<CR>
 
-map <leader>m :tnext<CR>zz
-map <leader>M :tprev<CR>zz
+map <leader>m :cn<CR>zz
+map <leader>M :cp<CR>zz
 
 map <leader>s :source ~/.vimrc<CR>
 
