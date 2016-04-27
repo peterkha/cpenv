@@ -27,7 +27,7 @@ fi
 if [ -z "$1" ]; then
   lastcmdvalue=`cat lastcmd.val`
   echo "using directory $lastcmdvalue"
-  requested=$lastcmdvalue
+  lineNum=$lastcmdvalue
 else
   case "$*" in
       ''|*[!0-9]*) numberArg="false";;
@@ -55,6 +55,7 @@ else
       lineNum=`awk "/$*\// {print NR}" lastcmd.dirs`
     fi
     echo "dir line $lineNum"
+    folderList=`sed "s|^|$exportFolder/|" lastcmd.dirs`
 
   else
     echo "number arg"
@@ -66,13 +67,13 @@ fi
 requested="$lineNum"
 store="New folder"
 
-
 count=1
 IFS=$'\n'
 for dir in $folderList; do
 
   if [[ "$count" -eq "$requested" ]]; then 
     echo "uploading "$dir""
+    mv $exportFolder/new/*.jpg $dir
     ./flickr_up.py -d "$dir"
     if [ ! -d "$dir"/"$store" ]; then
       mkdir "$dir"/"$store"
