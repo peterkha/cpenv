@@ -1,0 +1,38 @@
+#!/bin/bash
+
+dest="/e/import/"
+
+if [ ! -d "$dest" ]; then
+	echo "import doesnt' exist"
+	exit 1
+fi
+
+source="/l/"
+
+if [ -n "$1" ]; then
+  source="/$1/"
+fi
+
+echo "copying from $source"
+
+sourcelist=$(find "${source}DCIM" -iname "DSCF*.jpg" -o -iname "*.raf" )
+echo "$sourcelist" > "$HOME/.cpsource"
+
+cd "$HOME/bin"
+perl "$HOME/bin/cpcard.pl"
+cd -
+
+
+destlist=$(cat "$HOME"/.cpdest)
+
+echo "$destlist" | while read file; do
+
+if [ -n "$file" ]; then
+	echo "cp $file"
+	echo "$file" >> "$HOME/.cpcard"
+	cp "$file" "$dest"
+fi
+
+done
+
+
