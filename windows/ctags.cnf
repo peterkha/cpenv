@@ -1,0 +1,3 @@
+--exclude=".git" 
+--exclude="AmbaRelease_21-evk" 
+--exclude="USB_Release_R21"
