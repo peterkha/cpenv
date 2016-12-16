@@ -6,5 +6,5 @@ find $HOME/dev/pancam/hardware -type f \
        ! -path "*usbx_host_controllers*" \
        ! -path "*usbx_device_controllers*"\
        ! -path "*20140422_new_src_SD_boot*"\
-       ! -path "*20140603_fw_May_29_2014*" > $HOME/dev/ctags.files
+       ! -path "*20140603_fw_May_29_2014*" > $HOME/dev/ctags/ctags.files
 cd -
