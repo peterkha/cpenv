@@ -8,6 +8,7 @@ set smarttab
 set cindent  
 set copyindent  
 set number      " show line numbers
+"set relativenumber
 set ic
 set smartcase
 set nowrap
@@ -153,10 +154,13 @@ let g:easytags_async = 1
 let g:easytags_syntax_keyword = 'always'
 let g:easytags_python_enabled = 1
 let g:easytags_updatetime_min = 60000
+
+""""" linux ctags configuration """"""
 "let g:easytags_opts = ["--options=/home/peterh/ctags.cnf"]
 let g:easytags_opts = ["-L $HOME/dev/ctags/ctags.files"]
 let g:easytags_include_members = 0
 "let g:easytags_cmd = '$HOME/dev/ctags-gen'
+""""" linux ctags configuration """"""
 
 """"""""" airline """"""""""""
 
@@ -316,7 +320,7 @@ vmap <F4> :w !pbcopy<CR><CR>
 " file reopen /force reopen
 nmap <F5> :e<CR>
 nmap '<F5> :e!<CR>
-nmap <F6> :windo execute ":e!"<CR>:windo execute "normal! Gz."<CR>
+nmap <F6> :windo execute ":e!"<CR>:windo execute "normal! Gz."<CR>:redraw!<CR>
 
 
 "<F7> for word case toggle & <F8> for word capitalization
@@ -404,6 +408,9 @@ map <c-c> "+y
 map <c-v> "+p
 
 
+" equivalent o command on current line
+map <m-o> ii<esc>==cl
+ 
 
 
 """"""""""""""" Meta key maps """"""""""""""""""
@@ -440,6 +447,22 @@ map <M-e> <C-\>e
 "map <M-u> :UpdateTags -R $HOME/dev/pancam/hardware<CR>
 "map <M-i> :!/home/peterh/dev/ctags-filegen<CR>
 map <M-u> :!$HOME/dev/ctags/ctags-filegen<CR>:UpdateTags -R<CR><:!$HOME/dev/cscope/cscope-gen<CR>:cscope reset<CR>
+"
+
+"""""""""" MAc OSX INSTALL """""""""""
+" see ~/.ctags for configuration 
+" $ cat ~/.ctags
+" --c++-kinds=+p
+" --fields=+iaS
+" --exclude=.git
+" --exclude=*AmbaRelease_21-2-evk*
+" --exclude=*AmbaRelease_21-2-pure*
+" --exclude=*AmbaRelease_21-2uc*
+" --exclude=*20140422_new_src_SD_boot*
+" --exclude=*20140603_fw_May_29_2014*
+" --exclude=*usbx_host_controllers*
+" --exclude=*usbx_device_controllers*
+" map <M-u>  :!cscope-gen<CR>:UpdateTags -R /Users/peterh/dev/mac/pancam/hardware<CR>
 
 """""""""""""""" Leader key maps """""""""""""""""""""""
 
@@ -468,5 +491,24 @@ map <leader>M :cp<CR>zz
 
 map <leader>s :source ~/.vimrc<CR>
 
+
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+
+""""""""""""""" bullshit workarounds """"""""""""""
+
+
+" macvim hanging on gd
+map gd #
 
 
