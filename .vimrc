@@ -44,10 +44,14 @@ colorscheme zellner
 " vim fold highlight background for foldsearch
 :highlight Folded guibg=grey30 guifg=blue
 
+" completion list shows up in statusline
+set wildmenu
+set wildmode=longest:full,full
 
 "set showmatch  " Matching brackets
 set visualbell  " mutes sound on macvim
 
+set noequalalways " prevent resizing of windows when closing a split
 
 """"""" vundle """"""""""
 set nocompatible              " be iMproved, required
@@ -82,6 +86,10 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'https://github.com/xolox/vim-misc.git'
 
 Plugin 'https://github.com/xolox/vim-easytags.git'
+Plugin 'sheerun/vim-polyglot'
+"Plugin 'majutsushi/tagbar'
+Plugin 'taglist.vim'
+Plugin 'tpope/vim-markdown'
 
 
 
@@ -432,6 +440,7 @@ map <M-c> <C-\>c
 map <M-g> <C-\>g
 map <M-e> <C-\>e
 
+""""""""""" LINUX INSTALL """""""""""""
 " Ctags depends on:
 "   - installing exuberant ctags
 "   - configuration file ~/ctags.cnf for exclusions
@@ -471,24 +480,37 @@ map <leader>h <c-w>h
 map <leader>k <c-w>k
 map <leader>j <c-w>j
 
+" unmap combos starting with 'h' to avoid combo wait timeout when switching
+" window panes
+silent! unmap <leader>hp
+silent! unmap <leader>hr
+silent! unmap <leader>hs
+map <leader>gp :GitGutterPreviewHunk
+map <leader>gr :GitGutterRevertHunk
+map <leader>gs :GitGutterStageHunk
+
 map <leader>- :pta 
 "map <leader>} g<c-]>2<CR>zz
 map <leader>= g<c-]>
 map <leader>] <c-]>zz
 map <leader>[ <c-t>zz
-map <leader>; <c-w>}
-map <leader>: :ptselect<CR>
-map <leader>' :pc<CR>
+map <leader>' <c-w>}
+map <leader>; <c-w>v:vertical resize 50<cr>g<c-]>zz
+map <leader>: :only<CR>
+map <leader>" :pc<CR>
 
 map <leader>/ :noh<cr>
 
 map <leader>t :HighlightTags<CR>
+map <leader>f :TlistToggle<CR>
 
 map <leader>b :execute CloseHiddenBuffers()<CR>
 
 map <leader>m :cn<CR>zz
 map <leader>M :cp<CR>zz
 
+" vimrc auto open and write/source
+nmap <leader>S :tabe $MYVIMRC<CR>
 map <leader>s :source ~/.vimrc<CR>
 
 
