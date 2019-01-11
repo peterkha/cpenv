@@ -6,3 +6,6 @@
 --exclude=*usbx_host_controllers/* 
 --exclude=*usbx_device_controllers/* 
 --exclude=.git 
+--exclude=*.sh
+--exclude=*/.vimrc
+--exclude=*/.gvimrc

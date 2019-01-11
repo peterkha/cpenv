@@ -1,10 +1,10 @@
 " ~/.vim/sessions/default.vim:
 " Vim session script.
-" Created by session.vim 2.10.1 on 14 April 2015 at 11:52:27.
+" Created by session.vim 2.13.1 on 29 October 2018 at 12:17:40.
 " Open this file in Vim and run :source % to restore your session.
 
-set guioptions=egmrL
-silent! set guifont=
+set guioptions=aegimrLtT
+silent! set guifont=Monospace\ 11
 if exists('g:syntax_on') != 1 | syntax on | endif
 if exists('g:did_load_filetypes') != 1 | filetype on | endif
 if exists('g:did_load_ftplugin') != 1 | filetype plugin on | endif
@@ -12,26 +12,29 @@ if exists('g:did_indent_on') != 1 | filetype indent on | endif
 if &background != 'dark'
 	set background=dark
 endif
-if !exists('g:colors_name') || g:colors_name != 'torte' | colorscheme torte | endif
-call setqflist([])
+if !exists('g:colors_name') || g:colors_name != 'jellybeans' | colorscheme jellybeans | endif
+call setqflist([{'lnum': 2630, 'col': 0, 'pattern': '', 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'module': '', 'filename': 'mp_vision/eos/capture/direct_grabber.cpp', 'text': '<<<unknown>>> 			openni::Status status = openni::OpenNI::waitForAnyStream(&streams[0], streams.size(), &ready_stream_index, wait_time); '}, {'lnum': 2633, 'col': 0, 'pattern': '', 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'module': '', 'filename': 'mp_vision/eos/capture/direct_grabber.cpp', 'text': '<<<unknown>>> 				EOS_WARN("[DirectGrabber] waitForAnyStream failed (%s)", openni::OpenNI::getExtendedError()); '}])
 let SessionLoad = 1
 if &cp | set nocp | endif
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
-cd ~/dev/win/pancam/hardware/neofirmware
+silent tabonly
+cd ~/dev
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
 argglobal
 silent! argdel *
-argadd ~/.vimrc
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
 wincmd t
-set winheight=1 winwidth=1
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
 argglobal
 enew
 setlocal fdm=manual
@@ -43,11 +46,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 tabnext 1
-if exists('s:wipebuf')
+if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
 "   silent exe 'bwipe ' . s:wipebuf
 endif
 " unlet! s:wipebuf
 set winheight=1 winwidth=20 shortmess=filnxtToO
+set winminheight=1 winminwidth=1
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if file_readable(s:sx)
   exe "source " . fnameescape(s:sx)

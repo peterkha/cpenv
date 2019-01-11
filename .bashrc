@@ -37,7 +37,7 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+    xterm-color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -84,13 +84,11 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
 # some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls -alF --color'
+alias la='ls -A --color'
+alias l='ls -CF --color'
+alias lr='less -R'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -116,6 +114,473 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [ -f ~/.bash_profile ]; then
-    . ~/.bash_profile
+
+
+############### Custom ######################
+set -o vi
+export PS1='\[\e[0;31m\]\!\[\e[0;37m\][\t \[\033[0m\]\[\e[0;34m\]\w\[\e[0;32m\]$(parse_git_branch)\[\e[0;37m\]]\n $ '
+
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
 fi
+bind "set completion-ignore-case on"
+bind "set show-all-if-ambiguous on"
+
+alias srb="source ~/.bashrc"
+
+export PATH=$PATH:~/bin:~/dev/mp_vision/tools/mcp
+export PATH="$PATH:"/opt/microchip/xc32/v1.43/bin""
+export PATH="$PATH:"/opt/microchip/xc16/v1.32/bin""
+export PATH="/opt/microchip/xc16/v1.11/bin":"~/mp_vision-build":$PATH
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+export CDPATH=$CDPATH:~/dev/:~/dev/mp_vision/tools
+
+export MPCH=matterport@10.77.80.1:/home/matterport
+export MPC=matterport@10.77.80.1
+export PSF=/media/psf/Home/
+export MP_VISION_SRC=~/dev/mp_vision
+export MPV=~/dev/mp_vision
+export MPB=~/mp_vision-build
+export LEOS=/chroots/arm-cross-gcc5/root/build-dev/libeos.so
+export LEOSP=/chroots/arm-cross-gcc5/root/build-prod/libeos.so
+export LEOSM=/chroots/master/root/build-dev/libeos.so
+export LEOSMP=/chroots/master/root/build-prod/libeos.so
+export LNX=~/dev/linux-imx6/ubuntunize/linux-3.14.52*
+export MPD=/home/phahn/matterport/
+
+CAMERA_IP=10.77.80.1
+CAMERA_SSH=matterport@$CAMERA_IP
+TOOLS_DIR="$MPV/tools"
+CURL_CMD="$TOOLS_DIR/mcp/curl_camera.sh"
+KEYS="--cert $TOOLS_DIR/keys/mcp-client-cert.crt --key $TOOLS_DIR/keys/mcp-client-cert.key"
+STAT_CMD="stat -c%s"
+
+parse_git_branch() { 
+    branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+    commit=$(git log 2> /dev/null | head -1 | awk '{print $2}')
+    if [ "$branch" ]; then
+        echo " ($branch:${commit:0:5})"
+    fi
+}
+cgrep() { 
+    grep --color "$@" 
+}
+gacr() {
+  git add -u
+  git commit -m "rev"
+  git rebase -i $1
+}
+glog() { 
+    git log --pretty=oneline --abbrev-commit | head -n8 
+}
+gareb() { 
+    git add -u && git commit -m "rev" && git rebase -i HEAD^^ 
+}
+greb() {
+  git stash -k
+  git commit -m "rev" && git rebase -i HEAD^^
+  git stash pop
+}
+gl() { 
+    git ll | head -n 10 
+}
+fwbm() { 
+    if [ -n "$1" ]; then
+        sudo chroot /chroots/master make -C /root/build-prod -j8 base_app 
+    else
+        sudo chroot /chroots/master make -C /root/build-dev -j8 base_app 
+    fi
+}
+fwb() { 
+    if [ -n "$1" ]; then
+        sudo chroot /chroots/arm-cross-gcc5 make -C /root/build-prod -j8 base_app 
+    else
+        sudo chroot /chroots/arm-cross-gcc5 make -C /root/build-dev -j8 base_app 
+    fi
+}
+kernb() { 
+    ./make_mtp.sh ~/dev/qcacld-2.0/ ~/dev/kernel-module-imx-gpu-viv/ 
+}
+dit() { 
+    CAMERA_IP=10.77.80.1
+    TOOLS_DIR="$MPV/tools"
+    KEYS="--cert $TOOLS_DIR/keys/mcp-client-cert.crt --key $TOOLS_DIR/keys/mcp-client-cert.key"
+    get_state=
+    while [ ! $get_state ]; do
+        get_state=$(curl -m 1 -k --ciphers ALL $KEYS https://$CAMERA_IP/getState 2>/dev/null)
+        get_state=$(echo "$get_state" | sed 's|\\"|"|g' | sed 's|\\\\\\||g')
+    done
+
+    serial=$(echo "$get_state" | sed -E 's/.*cameraSerial\":\"([0-9A-Z]*).*/\1/g')
+    echo "Camera Serial: $serial"
+    $CURL_CMD "disableIdleTimeouts" 
+    echo "$get_state"
+
+}
+mchr() {
+sudo mount --bind "/home/phahn/dev/mp_vision" "/chroots/arm-cross-gcc5/root/mp_vision" 
+sudo mount -o remount,ro /chroots/arm-cross-gcc5/root/mp_vision/
+sudo mount --bind "/home/phahn/dev/mp_vision" "/chroots/master/root/mp_vision" 
+sudo mount -o remount,ro /chroots/master/root/mp_vision/
+}
+sweep() {
+    if [ ! -d ~/Desktop/sweeps ]; then
+        mkdir ~/Desktop/sweeps
+    fi
+    cd ~/Desktop/sweeps
+    sweep.sh "$@"
+    cd -
+}
+sweepr() {
+    if [ ! -d ~/Desktop/sweeps ]; then
+        mkdir ~/Desktop/sweeps
+    fi
+    cd ~/Desktop/sweeps
+    while true; do rm *.raw *.swl; timeout 30s sweep.sh "$@"; sleep 1; date; done
+}
+bsubm() {
+    if [ -n "$1" ]; then
+        if [ "$1" == "p" ]; then
+            fwbm p
+            cd $MPV/tools/update_tools
+            sed -i "s/build-dev/build-prod/g" create-update-body.sh
+            git add create-update-body.sh
+        else
+            fwbm
+        fi
+        if [ "$?" -eq 0 ]; then
+            cd update_tools
+            sudo ./create-update-body.sh
+            cd home-matterport
+            sudo ../sign-create-update.sh ../gamma_update_private_key.pem
+            cd -
+        fi
+    else
+        if ping -c1 -w3 10.77.80.1 >/dev/null 2>&1; then
+            dit
+            cd update_tools
+            ./build-submit.sh
+            cd -
+        else
+            echo "Connect to camera"
+        fi
+    fi
+}
+
+bsub() {
+    if [ -n "$1" ]; then
+        if [ "$1" == "p" ]; then
+            fwb p
+            cd $MPV/tools/update_tools
+            sed -i "s/build-dev/build-prod/g" create-update-body.sh
+            git add create-update-body.sh
+        else
+            fwb
+        fi
+        if [ "$?" -eq 0 ]; then
+            cd update_tools
+            sudo ./create-update-body.sh
+            cd home-matterport
+            sudo ../sign-create-update.sh ../gamma_update_private_key.pem
+            cd -
+        fi
+    else
+        if ping -c1 -w3 10.77.80.1 >/dev/null 2>&1; then
+            dit
+            cd update_tools
+            ./build-submit.sh
+            cd -
+        else
+            echo "Connect to camera"
+        fi
+    fi
+}
+
+stssh() {
+    if ping -c1 -w3 10.77.80.1 >/dev/null 2>&1; then
+        cd update_tools
+        ./submit-apply-update.sh ../keys ../updates/update-start-ssh.tar
+        cd -
+    else
+        echo "Connect to camera"
+    fi
+}
+
+function mountCalRecords() {
+    CALRECS_IP=10.2.10.10
+    ping "$PING_ARGS" "$CALRECS_IP" >/dev/null 2>&1
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        # If server is not accessible then cifs will hang on directory access,
+        # so don't check for existence unless ping succeeds
+        if [ ! -d $HOME/CalRecords/gamma ]; then
+            echo "$HOME/CalRecords is empty or not mounted."  
+            echo "Needed for keys to ssh into camera."
+            echo "Check with manufacturing team for access to CalRecords on 10.2.10.10"
+            read -p "Enter username for diskstation (10.2.10.10): " USERNAME
+            read -s -p "Enter password for diskstation (10.2.10.10): " PASSWORD
+            echo ""
+
+            if [ ! -d $HOME/CalRecords ]; then
+                echo "Creating directory $HOME/CalRecords"
+                mkdir $HOME/CalRecords
+            fi
+
+            echo "Mounting 10.2.10.10/CalRecords to ~/CalRecords"
+            if [[ "$OSTYPE" =~ "darwin" ]]; then
+                mount_smbfs //$USERNAME:$PASSWORD@10.2.10.10/CalRecords $HOME/CalRecords
+            else # otherwise assume running on linux
+                echo "Installing cifs-utils"
+                sudo apt -y install cifs-utils
+                sudo mount -t cifs -o username="$USERNAME",password="$PASSWORD" //10.2.10.10/CalRecords "$HOME"/CalRecords
+            fi
+
+            if [ ! -d $HOME/CalRecords/gamma ]; then
+                echo "Mounting CalRecords failed"
+                return 1
+            fi
+
+            USERNAME=""
+            PASSWORD=""
+        fi
+        CALRECS_AVAIL=true
+    else
+        CALRECS_AVAIL=""
+    fi
+}
+
+ssh_add() {
+    if [ "$1" ]; then
+        serial=$1
+    else
+        get_state="$($CURL_CMD getState 2>/dev/null)"
+        serial=$(echo "$get_state" | sed -E 's/.*cameraSerial\":\"([0-9A-Z]*).*/\1/g')
+    fi
+
+    LOCAL_SSHKEY_PATH=$HOME/.ssh/$serial.identity
+    if [ -f "$LOCAL_SSHKEY_PATH" ]; then
+        SSHKEY_PATH=$LOCAL_SSHKEY_PATH
+    else
+        mountCalRecords
+        if [ "$CALRECS_AVAIL" ]; then
+            if [[ $serial =~ M....... ]]; then
+                # last two characters in serial e.g. M02FFK2S ==> 2S
+                folder_prefix=${serial:6:2}
+            else
+                # first two characters in serial e.g. P216 ==> P2
+                folder_prefix=${serial:0:2}
+            fi
+            CALREC_SSHKEY_PATH=$HOME/CalRecords/gamma/$folder_prefix/$serial/SSH_key.identity
+            SSHKEY_PATH=$CALREC_SSHKEY_PATH
+        else
+            SSHKEY_PATH=""
+            echo "Neither CalRecords nor local copy of key available"
+            return 1
+        fi
+    fi
+    
+    if [ "$SSHKEY_PATH" ]; then
+        ssh-add "$SSHKEY_PATH"
+        if [ $? -eq 0 -a ! -f $LOCAL_SSHKEY_PATH ]; then
+            # make a local copy of the SSH key so camera can be accessed
+            # later without connection to CalRecords
+            echo "Copying $serial SSH key to $LOCAL_SSHKEY_PATH"
+            cp $SSHKEY_PATH $LOCAL_SSHKEY_PATH
+            chmod 0600 $LOCAL_SSHKEY_PATH
+        fi
+    fi
+}
+
+function sshTest() {
+    PING_ARGS="-w 1 "
+    if [[ "$OSTYPE" =~ "darwin" ]]; then
+        PING_ARGS="-t 1 -c 1 "
+    fi
+    ping "$PING_ARGS" "$CAMERA_IP" >/dev/null 2>&1
+    ret="$?"
+
+    if [ "$ret" -ne 0 ]; then
+        echo "Pinging camera timed out, check wifi connection"
+        return 1
+    else
+        # use SSH test args if user sent any
+        if [ "$#" -eq 0 ]; then
+            # test printing empty string
+            SSH_TESTARGS="printf \"\""
+        else
+            SSH_TESTARGS="$@"
+        fi
+
+        $CURL_CMD "disableIdleTimeouts" >/dev/null 2>&1
+        ssh_add
+
+        if [ -n "$(echo "$get_state" | grep "\-P")" ]; then
+            # quick check SSH before starting server
+            ssh $CAMERA_SSH "$SSH_TESTARGS"
+            ret=$?
+            if [ $ret -ne 0 ]; then
+                echo "Found production version fw, starting SSH"
+                cd $TOOLS_DIR/update_tools
+                ./submit-apply-update.sh ../keys ../updates/update-start-ssh.tar
+                cd -
+                sleep 1 # let ssh server start
+            else
+                return 0;
+            fi
+        else
+            echo "Running dev firmware"
+        fi
+
+        ssh $CAMERA_SSH "$SSH_TESTARGS"
+        ssh_ret=$?
+
+        if [ "$ssh_ret" -ne 0 -a "$SSHKEY_PATH" ]; then
+            echo "Clearing SSH keys..."
+            ssh-add -D
+            ssh-add $SSHKEY_PATH
+            ssh $CAMERA_SSH "$SSH_TESTARGS" 
+            if [ "$?" -ne 0 ]; then
+                return 1
+            fi
+        elif [ "$ssh_ret" -ne 0 ]; then
+            echo "Unable to add keys for camera. Connect to internet, source common.sh, and run ssh_add $serial"
+            return 1
+        fi
+    fi
+    return 0
+}
+
+function ssh_camera() {
+    # test SSH with any input arguments
+    sshTest "$@"
+    ret="$?"
+    if [ "$ret" -ne 0 ]; then
+        echo "Unable to SSH to camera"
+    else
+        # if no input arguments then start the SSH terminal session now
+        if [ "$#" -eq 0 ]; then
+            ssh $CAMERA_SSH
+            ret=$?
+        fi
+    fi
+    return "$ret"
+}
+
+
+
+
+
+lograb() {
+    if [ -z "$1" ]; then
+        echo "specify output directory"
+    else
+        sshTest
+        ret="$?"
+        if [ "$ret" -ne 0 ]; then
+            echo "Unable to SSH to camera"
+            return 1
+        else
+            if [ -n "$serial" ]; then
+                if [ ! -d "$1" ]; then
+                    mkdir "$1";
+                fi
+                cd "$1"
+                if [ -d "$serial" ]; then
+                    echo "$serial logs directory already exists"
+                else
+                    echo "mkdir "$serial""
+                    mkdir "$serial"
+                    if [ "$2" == "all" ]; then
+                        ssh $CAMERA_SSH 'sudo chmod 0644 /var/log/upstart/camera_manager*'
+                        scp $CAMERA_SSH:/var/log/upstart/camera_manager.log* $serial
+                        gunzip -f $serial/*.gz
+                        for i in {9..1}; do cat $serial/camera_manager.log.$i >> $serial/camman_all; done
+                        cat $serial/camera_manager.log >> $serial/camman_all
+                        rm $serial/camera_manager*
+                        mv $serial/camman_all $serial/camera_manager.all
+
+                        ssh $CAMERA_SSH 'sudo chmod 0644 /var/log/syslog*'
+                        scp $CAMERA_SSH:/var/log/syslog* $serial
+                        gunzip -f $serial/*.gz
+                        for i in {9..1}; do cat $serial/syslog.$i >> $serial/systemlog_all; done
+                        cat $serial/syslog >> $serial/systemlog_all
+                        rm $serial/syslog*
+                        mv $serial/systemlog_all $serial/syslog.all
+                    else
+                        scp $CAMERA_SSH:/home/matterport/eos/eos.log* $serial
+                        gunzip -f $serial/*.gz
+                        for i in {9..0}; do cat $serial/eos.log.$i >> $serial/eoslog_all; done
+                        cat $serial/eos.log >> $serial/eoslog_all
+                        rm $serial/eos.log*
+                        mv $serial/eoslog_all $serial/eos.all
+                    fi
+                fi
+                cd -
+            else
+                echo "no serial found"
+            fi
+        fi
+    fi
+    return 0
+}
+  
+
+sshcam() {
+    # test SSH with any input arguments
+    sshTest "$@"
+    ret="$?"
+    if [ "$ret" -ne 0 ]; then
+        echo "Unable to SSH to camera"
+    else
+        # if no input arguments then start the SSH terminal session now
+        if [ "$#" -eq 0 ]; then
+            ssh $CAMERA_SSH
+            ret=$?
+        fi
+    fi
+    return "$ret"
+}
+
+chroot_dir="/chroots/arm-cross-gcc5/"
+function chroot_execute {
+    sudo chroot "$chroot_dir" sh -c "$*" 
+}
+
+function chroot_execute_t {
+    (command time -f "$* in chroot took %E" sudo chroot "$chroot_dir" sh -c "$*")
+}
+
+onibuild() {
+    echo '----- build openni (matterport custom)'
+    chroot_execute   'mount -t proc proc /proc'
+    chroot_execute   'rsync -a /root/mp_vision/thirdparty/OpenNI2/ /root/OpenNI2-matterport'
+    chroot_execute_t 'cd /root/OpenNI2-matterport && ARM_STAGING=/ ARM_CXX=arm-linux-gnueabihf-g++ PLATFORM=Arm make'
+}
+
+gammalist() {
+    cd ~/gammacal
+    date > ~/gammacal_listing.txt
+    if [ "$(ls)" ]; then
+        find . -iname "*.identity" >> ~/gammacal_listing.txt
+    fi
+}
+
+shad() {
+    ssh-add ~/gammacal/"$(grep "$1" ~/gammacal_listing.txt)"
+}
+
+resub() {
+    dit
+    cd update_tools
+    ./submit-apply-update.sh ../keys home-matterport/update-*.tar
+    cd -
+}
+
+function set-title() {
+  if [[ -z "$ORIG" ]]; then
+    ORIG=$PS1
+  fi
+  TITLE="\[\e]2;$*\a\]"
+  PS1=${ORIG}${TITLE}
+}

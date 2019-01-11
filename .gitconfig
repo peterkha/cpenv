@@ -1,0 +1,55 @@
+[core]
+	editor = vim
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[user]
+	email = phahn@matterport.com
+	name = Peter Hahn
+[alias]
+    co = checkout
+    st = status -uno
+    br = branch
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    type = cat-file -t
+    dump = cat-file -p
+    lg = log -5
+    logf = log --pretty=fuller --stat
+    logp = log --pretty=fuller --stat -p
+    ll = log --oneline
+    prom = pull --rebase origin master
+    stsh = "!f() { git stash show stash@{$*} -p; }; f"
+    stap = "!f() { git stash apply stash@{$*}; }; f"
+    sync = "!f() { git fetch origin master:master; }; f"
+[push]
+	default = matching
+[merge]
+    keepBackup = false;
+	tool = p4mergetool
+[mergetool]
+    prompt = false
+	keepBackup = false
+[mergetool "p4merge"]
+    cmd = p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+    keepTemporaries = false
+    trustExitCode = false
+    keepBackup = false
+[diff]
+    tool = p4merge
+[difftool]
+    prompt = false
+[difftool "p4merge"]
+    cmd = p4merge "$LOCAL" "$REMOTE"
+    keepTemporaries = false
+    trustExitCode = false
+    keepBackup = false
+
+
+
+
+
+[mergetool "p4mergetool"]
+	cmd = /home/phahn/bin/p4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
+	trustExitCode = false

@@ -1,14 +1,14 @@
 set nocompatible
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 set expandtab
 set shiftround  
 set smarttab    
 set cindent  
 set copyindent  
 set number      " show line numbers
-"set relativenumber
+set relativenumber
 set ic
 set smartcase
 set nowrap
@@ -24,14 +24,11 @@ set hidden
 
 set cino+=(0    " indent function args to (
 
-set guioptions-=m
-set winaltkeys=no
-
+set backspace=indent,eol,start   " get backspace working like most programs
 
 syntax on
 filetype plugin indent on
 
-"set macmeta
 let mapleader = ' '
 
 """"""""" color/appearance configs """"""""""
@@ -69,12 +66,10 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-"Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 " plugin from http://vim-scripts.org/vim/scripts.html
 "Plugin 'L9'
-" Git plugin not hosted on GitHub
-"Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
+"" git repos on your local machine (i.e. when working on your own plugin)
 "Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
@@ -83,15 +78,34 @@ Plugin 'VundleVim/Vundle.vim'
 " different version somewhere else.
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
-Plugin 'https://github.com/xolox/vim-misc.git'
-
+Plugin 'tpope/vim-fugitive'
+Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'https://github.com/kien/ctrlp.vim.git'
+Plugin 'https://github.com/rgarver/Kwbd.vim.git'
+Plugin 'https://github.com/vim-scripts/MultipleSearch.git'
+Plugin 'https://github.com/scrooloose/nerdtree.git'
+Plugin 'https://github.com/vim-airline/vim-airline.git'
+Plugin 'https://github.com/vim-scripts/vim-auto-save.git'
+Plugin 'https://github.com/altercation/vim-colors-solarized.git'
+Plugin 'https://github.com/junegunn/vim-easy-align.git'
 Plugin 'https://github.com/xolox/vim-easytags.git'
+Plugin 'https://github.com/airblade/vim-gitgutter.git'
+Plugin 'https://github.com/xolox/vim-session.git'
+Plugin 'https://github.com/xolox/vim-misc.git'
+Plugin 'https://github.com/vim-scripts/AnsiEsc.vim.git'
+Plugin 'https://github.com/vim-scripts/Mark--Karkat'
 Plugin 'sheerun/vim-polyglot'
-"Plugin 'majutsushi/tagbar'
+Plugin 'majutsushi/tagbar'
 Plugin 'taglist.vim'
 Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-capslock'    " enable with <C-G>c in insert mode
 
+Plugin 'https://github.com/ramele/agrep.git'
+"Plugin 'https://github.com/maralla/validator.vim.git'
+Plugin 'https://github.com/skywind3000/asyncrun.vim.git'
+Plugin 'https://github.com/tpope/vim-unimpaired.git'
 
+Plugin 'https://github.com/tpope/vim-repeat.git'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -113,17 +127,20 @@ execute pathogen#infect()
 
 "source ~/.vim/plugin/comments.vim
 "source ~/.vim/plugin/foldsearch.vim
+:let g:foldsearch_disable_mappings = 1
 "source ~/.vim/winpos.vim
 
 
 :let g:session_autosave = 'no'
 :let g:session_autoload = 'no'
-au VimLeavePre * call SaveAndCloseSession()
-"function SaveAndCloseSession()
+"function !SaveAndCloseSession()
     "SaveSession!
     "CloseSession
 "endfunction
+"au VimLeavePre * call SaveAndCloseSession()
 
+"let g:validator_cpp_checkers = ['clang-tidy']
+"let g:validator_clang_tidy_binary = '/usr/bin/clang-tidy-3.5'
 
 
 """"""""" cscope quickfix """""""""
@@ -134,7 +151,7 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 
 
 """"""""" default directory """"""""""
-:cd ~/dev/
+":cd ~/dev/
 
 
 """""""""""" youcompleteme """""""""
@@ -149,7 +166,8 @@ let g:auto_save = 1  " enable AutoSave on Vim startup
 "AutoSave relies on CursorHold event and sets the updatetime option to 200 so that modifications are saved almost instantly.
 "But sometimes changing the updatetime option may affect other plugins and break things.
 "You can prevent AutoSave from changing the updatetime with g:auto_save_no_updatetime option:
-let g:auto_save_no_updatetime = 1  " do not change the 'updatetime' option
+let g:auto_save_no_updatetime = 25  " do not change the 'updatetime' option
+let g:auto_save_in_insert_mode = 0  " NOTE: manual code change to plugin to not save when leaving insert
 
 """"""""""  easytags """""""""""""""
 
@@ -158,16 +176,17 @@ set regexpengine=1
 
 " faster tag highlighting
 let g:easytags_async = 1
-"let g:easytags_auto_highlight = 0
+let g:easytags_auto_highlight = 1
 let g:easytags_syntax_keyword = 'always'
 let g:easytags_python_enabled = 1
 let g:easytags_updatetime_min = 60000
 
 """"" linux ctags configuration """"""
-"let g:easytags_opts = ["--options=/home/peterh/ctags.cnf"]
-let g:easytags_opts = ["-L $HOME/dev/ctags/ctags.files"]
-let g:easytags_include_members = 0
-"let g:easytags_cmd = '$HOME/dev/ctags-gen'
+"let g:easytags_file = '/home/phahn/ctags'
+let g:easytags_opts = ["--options=/home/phahn/ctags.cnf"]
+"let g:easytags_opts = ["-L /home/phahn/ctags.files"]
+"let g:easytags_include_members = 0
+let g:easytags_cmd = '/usr/local/bin/ctags'
 """"" linux ctags configuration """"""
 
 """"""""" airline """"""""""""
@@ -184,12 +203,13 @@ let g:ctrlp_max_depth = 100
 let g:ctrlp_root_markers = ['.ctrlp']
 let g:ctrlp_clear_cache_on_exit = 0
 
-nnoremap <silent> <C-b> :CtrlPBuffer<CR>
+nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <C-p> :CtrlPTag<CR>
 """"""""" ccommandT configuration """"""""""
 set wildignorecase
-set wildignore+=*.o,*.obj,*.class,*.compact,*.2d,*.json,*.png,*.plo,*.po,*.pdf,*.html,*.py,*.xml,*.jpg,*.jpeg,*.jar,*.graffle,*.zip,*.so,*.fw,*.3gp,*.mp4,*/LytroFoundation/*
-nnoremap <silent> <leader>o ::CommandT ~/dev/pancam/hardware<CR>
+set wildignore+=*.o,*.obj,*.class,*.compact,*.2d,*.json,*.png,*.plo,*.po,*.pdf,*.html,*.py,*.xml,*.jpg,*.jpeg,*.jar,*.graffle,*.zip,*.so,*.fw,*.3gp,*.mp4
+set wildignore+=20140422_new_src_SD_boot/**,20140603_fw_May_29_2014/**,image_quality/**
+nnoremap <silent> <leader>o ::CommandT ~/dev/<CR>
 let g:CommandTMaxFiles = 500000
 let g:CommandTInputDebounce = 700
 let g:CommandTMaxCachedDirectories = 10
@@ -198,6 +218,10 @@ let g:CommandTHighlightColor="Visual"
 """"""""" NERDTree configs """"""""""""""""
 noremap <silent> <leader>N :NERDTreeFind<CR>
 noremap <silent> <leader>n :NERDTree<CR>
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeGlyphReadOnly = "RO"
 
 
 
@@ -254,15 +278,15 @@ endfun
 
 """"""""" commentline configuration """"""""""
 " key-mappings for comment line in normal mode
-noremap  <silent> <S-CR> :call CommentLine()<CR>zz
-noremap  <silent> <C-M> :call CommentLine()<CR>
+noremap  <silent> <leader><cr> :call CommentLine()<CR>
+noremap  <silent> <s-cr> :call CommentLine()<CR>
 " key-mappings for range comment lines in visual <Shift-V> mode
-vnoremap <silent> <C-M> :call RangeCommentLine()<CR>
+vnoremap <silent> <leader><cr> :call RangeCommentLine()<CR>
+vnoremap <silent> <s-cr> :call RangeCommentLine()<CR>
 " key-mappings for un-comment line in normal mode
-noremap  <silent> <C-N> :call UnCommentLine()<CR>j
-noremap  <silent> <M-n> :call UnCommentLine()<CR>jzz
+noremap  <silent> <c-n> :call UnCommentLine()<CR>j
 " key-mappings for range un-comment lines in visual <Shift-V> mode
-vnoremap <silent> <C-N>  :call RangeUnCommentLine()<CR>
+vnoremap <silent> <c-n>  :call RangeUnCommentLine()<CR>
 
 
 
@@ -290,14 +314,12 @@ map "RR :%retab<CR>
 
 map 'll :set autoread<CR>
 
-map 's1 :SaveSession! mainbufs<CR>
-map 's2 :SaveSession! miscbufs<CR>
-map 's3 :SaveSession! envbufs<CR>
-map 's4 :SaveSession! logbufs<CR>
-map 'l1 :OpenSession! mainbufs<CR>
-map 'l2 :OpenSession! miscbufs<CR>
-map 'l3 :OpenSession! envbufs<CR>
-map 'l4 :OpenSession! logbufs<CR>
+map 's1 :mks! ~/.vim/session1.vim<CR>
+map 's2 :mks! ~/.vim/session2.vim<CR>
+map 's3 :mks! ~/.vim/session3.vim<CR>
+map 'l1 :source ~/.vim/session1.vim<CR>
+map 'l2 :source ~/.vim/session2.vim<CR>
+map 'l3 :source ~/.vim/session3.vim<CR>
 
 
 map "Q :CloseSession<bar>q<CR>
@@ -344,10 +366,6 @@ imap <F8> _<Esc>mza<C-Right><Esc>bgUiw`zi<Del>
 map <F10> :! open "%:p:h"<CR>
 
 
-" vimrc auto open and write/source
-nmap "<S-F4> :tabe $MYVIMRC<CR>
-nmap "<S-F5> :w!<CR>:so $MYVIMRC<CR>
-
 
 
 
@@ -384,10 +402,10 @@ map <C-H> zH
 " insert line break, spaces, tabs
 nnoremap <C-J> i<CR><Esc>h
 nnoremap <M-j> i<SPACE><Esc>
-nnoremap <M-J> i<TAB><Esc>
+"nnoremap <M-J> i<TAB><Esc> doesn't work for linux
 
-" multi color search MultipleSearch.vim
-map <Bslash> :Search 
+" multi color search mark karkat
+map <Bslash> :Mark 
 
 " ctrl tab to move around tabs
 map <C-Tab> :tabn<CR>
@@ -398,6 +416,11 @@ imap <C-S-Tab> <C-O>:tabp<CR>
 " ctrl tab alternative 
 map <M-S-o> :tabn<CR>
 map <M-S-i> :tabp<CR>
+"map Q :tabn<cr>
+"map <leader>q :tabp<cr>
+map W :tabnext<cr>
+map Q :tabprev<CR>
+
 
 " backspace in normal mode
 nmap <BS> a<BS>
@@ -407,26 +430,34 @@ nmap <BS> a<BS>
 map <C-s> :w<CR>
 imap <C-s> <esc>:w<CR>li
  
-" decrement remap
-noremap <C-z> <C-x> 
+" increment decrement remap
+noremap <C-Z> <C-x> 
+noremap <C-z> <C-a> 
+
+map <c-A> ggVG"+y
  
 
-" win cpy paste
-map <c-c> "+y
-map <c-v> "+p
 
 
 " equivalent o command on current line
 map <m-o> ii<esc>==cl
+
+vmap * "zy/<c-r>z<cr>
+vmap # "zy?<c-r>z<cr>
  
 
 
+" copy paste for parallels but if messes up block edit and other things
+"vmap <c-s-c> "+y
+"map <c-s-v> i<c-r>+<esc>
+"imap <c-s-v> <c-r>+
+"
 """"""""""""""" Meta key maps """"""""""""""""""
 
 
 "map <C-S-e> :tabe ~/.wine/drive_c/winepath.txt<CR>v-gf<C-o>:bd<CR>
 "map <C-S-e> :tabe ~/temp/winepath.txt<CR>v-gf:bp<bar>bp<bar>sp<bar>bn<bar>bd<CR>
-map <C-S-E> :tabe ~/temp/winepath.txt<CR>v-gf<C-b>winepath<CR>:Kwbd<CR>
+"map <C-S-E> :tabe ~/temp/winepath.txt<CR>v-gf<C-b>winepath<CR>:Kwbd<CR>
 
 
 map <M-S-l> :bd!<CR>
@@ -435,10 +466,24 @@ map <M-S-l> :bd!<CR>
 nmap <M-a> :tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
 "vmap <C-S-a> <c-c>:tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
 
-map <M-s> <C-\>s
-map <M-c> <C-\>c
-map <M-g> <C-\>g
-map <M-e> <C-\>e
+
+"  cscope search symbol with meta key
+"   's'   symbol: find all references to the token under cursor
+"   'g'   global: find global definition(s) of the token under cursor
+"   'c'   calls:  find all calls to the function name under cursor
+"   't'   text:   find all instances of the text under cursor
+"   'e'   egrep:  egrep search for the word under cursor
+"   'f'   file:   open the filename under cursor
+"   'i'   includes: find files that include the filename under cursor
+"   'd'   called: find functions that function under cursor calls
+"map <M-s> <C-\>s
+"map <M-g> <C-\>g
+"map <M-c> <C-\>c
+"map <M-t> <C-\>t
+"map <M-e> <C-\>e
+"map <M-f> <C-\>f
+"map <M-i> <C-\>i
+"map <M-d> <C-\>d
 
 """"""""""" LINUX INSTALL """""""""""""
 " Ctags depends on:
@@ -455,7 +500,7 @@ map <M-e> <C-\>e
 "   - configure .vim/plugin/cscope.vim with full path to cscope-gen output
 "map <M-u> :UpdateTags -R $HOME/dev/pancam/hardware<CR>
 "map <M-i> :!/home/peterh/dev/ctags-filegen<CR>
-map <M-u> :!$HOME/dev/ctags/ctags-filegen<CR>:UpdateTags -R<CR><:!$HOME/dev/cscope/cscope-gen<CR>:cscope reset<CR>
+"map <M-u> :!$HOME/dev/ctags/ctags-filegen<CR>:UpdateTags -R<CR><:!$HOME/dev/cscope/cscope-gen<CR>:cscope reset<CR>
 "
 
 """""""""" MAc OSX INSTALL """""""""""
@@ -471,7 +516,9 @@ map <M-u> :!$HOME/dev/ctags/ctags-filegen<CR>:UpdateTags -R<CR><:!$HOME/dev/csco
 " --exclude=*20140603_fw_May_29_2014*
 " --exclude=*usbx_host_controllers*
 " --exclude=*usbx_device_controllers*
-" map <M-u>  :!cscope-gen<CR>:UpdateTags -R /Users/peterh/dev/mac/pancam/hardware<CR>
+let g:asyncrun_open = 10
+map <leader>U  :AsyncRun ~/dev/cscope/cscope-gen<CR>
+map <leader>u  :ccl<CR>:cscope reset<CR>:UpdateTags -R /home/phahn/dev/mp_vision/eos<CR><CR>
 
 """""""""""""""" Leader key maps """""""""""""""""""""""
 
@@ -482,36 +529,44 @@ map <leader>j <c-w>j
 
 " unmap combos starting with 'h' to avoid combo wait timeout when switching
 " window panes
-silent! unmap <leader>hp
-silent! unmap <leader>hr
-silent! unmap <leader>hs
+:let g:gitgutter_map_keys = 0
+"unmap <leader>hp
+"unmap <leader>hu
+"unmap <leader>hs
 map <leader>gp :GitGutterPreviewHunk
 map <leader>gr :GitGutterRevertHunk
 map <leader>gs :GitGutterStageHunk
+map <leader>gu :GitGutterUndoHunk
+map [g :GitGutterPrevHunk<CR>
+map ]g :GitGutterNextHunk<CR>
 
-map <leader>- :pta 
+map <leader>_ :pta 
+map <leader>- <c-w><c-]><c-w>T
 "map <leader>} g<c-]>2<CR>zz
 map <leader>= g<c-]>
+map <leader>+ g<c-]>1<CR><CR>
 map <leader>] <c-]>zz
 map <leader>[ <c-t>zz
-map <leader>' <c-w>}
-map <leader>; <c-w>v:vertical resize 50<cr>g<c-]>zz
+map <leader>' <c-w>}:ptjump<CR>
+map <leader>; <c-w>v:vertical resize 50<cr>g<c-]>zz<c-w>l
+map <leader>L <c-w>h:q<cr>
 map <leader>: :only<CR>
 map <leader>" :pc<CR>
 
 map <leader>/ :noh<cr>
 
-map <leader>t :HighlightTags<CR>
+map <leader>t :TagbarToggle<CR>
 map <leader>f :TlistToggle<CR>
 
-map <leader>b :execute CloseHiddenBuffers()<CR>
+vmap <leader>c "+y
+map <leader>C :execute CloseHiddenBuffers()<CR>
 
-map <leader>m :cn<CR>zz
-map <leader>M :cp<CR>zz
+" map <leader>m :cn<CR>zz
+" map <leader>M :cp<CR>zz
 
 " vimrc auto open and write/source
 nmap <leader>S :tabe $MYVIMRC<CR>
-map <leader>s :source ~/.vimrc<CR>
+map <leader>s :source ~/.gvimrc<CR>
 
 
 " Go to tab by number
@@ -526,6 +581,10 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
+map <leader>a :Agrep 
+
+map <leader>r :OpenSession default<CR>
+
 
 """"""""""""""" bullshit workarounds """"""""""""""
 
@@ -533,4 +592,16 @@ noremap <leader>0 :tablast<cr>
 " macvim hanging on gd
 map gd #
 
+"""""""""""""""""' linux keys """""""""""""""
+" vim doesn't do c-q for visual mode
+nnoremap <c-q> <c-v>
+
+vmap <c-c> "+y
+
+
+highlight Ignore guifg=#002b36 guibg=#002b36
+match Ignore /\r$/
+
+
+set pastetoggle=<F2>
 
