@@ -142,12 +142,13 @@ export PSF=/media/psf/Home/
 export MP_VISION_SRC=~/dev/mp_vision
 export MPV=~/dev/mp_vision
 export MPB=~/mp_vision-build
-export LEOS=/chroots/arm-cross-gcc5/root/build-dev/libeos.so
-export LEOSP=/chroots/arm-cross-gcc5/root/build-prod/libeos.so
+export LEOS=/chroots/$(cat ~/.fwb_chroot)/root/build-dev/libeos.so
+export LEOSP=/chroots/$(cat ~/.fwb_chroot)/root/build-prod/libeos.so
 export LEOSM=/chroots/master/root/build-dev/libeos.so
 export LEOSMP=/chroots/master/root/build-prod/libeos.so
 export LNX=~/dev/linux-imx6/ubuntunize/linux-3.14.52*
 export MPD=/home/phahn/matterport/
+export FLAGF=/home/phahn/bin/camera_manager.flagfile
 
 CAMERA_IP=10.77.80.1
 CAMERA_SSH=matterport@$CAMERA_IP
@@ -193,10 +194,11 @@ fwbm() {
     fi
 }
 fwb() { 
+    echo "fwb_chroot is $(cat ~/.fwb_chroot)"
     if [ -n "$1" ]; then
-        sudo chroot /chroots/arm-cross-gcc5 make -C /root/build-prod -j8 base_app 
+        sudo chroot /chroots/$(cat ~/.fwb_chroot) make -C /root/build-prod -j8 base_app 
     else
-        sudo chroot /chroots/arm-cross-gcc5 make -C /root/build-dev -j8 base_app 
+        sudo chroot /chroots/$(cat ~/.fwb_chroot) make -C /root/build-dev -j8 base_app 
     fi
 }
 kernb() { 
@@ -219,10 +221,16 @@ dit() {
 
 }
 mchr() {
-sudo mount --bind "/home/phahn/dev/mp_vision" "/chroots/arm-cross-gcc5/root/mp_vision" 
-sudo mount -o remount,ro /chroots/arm-cross-gcc5/root/mp_vision/
-sudo mount --bind "/home/phahn/dev/mp_vision" "/chroots/master/root/mp_vision" 
-sudo mount -o remount,ro /chroots/master/root/mp_vision/
+    MPOINT=/chroots/$(cat ~/.fwb_chroot)/root/mp_vision
+    if ! mount -l | grep "$MPOINT"; then
+        sudo mount --bind "/home/phahn/dev/mp_vision" "$MPOINT"
+        sudo mount -o remount,ro "$MPOINT"
+    fi
+    MPOINT=/chroots/master/root/mp_vision
+    if ! mount -l | grep "$MPOINT"; then
+        sudo mount --bind "/home/phahn/dev/mp_vision" "$MPOINT"
+        sudo mount -o remount,ro "$MPOINT"
+    fi
 }
 sweep() {
     if [ ! -d ~/Desktop/sweeps ]; then
@@ -230,14 +238,13 @@ sweep() {
     fi
     cd ~/Desktop/sweeps
     sweep.sh "$@"
-    cd -
 }
 sweepr() {
     if [ ! -d ~/Desktop/sweeps ]; then
         mkdir ~/Desktop/sweeps
     fi
     cd ~/Desktop/sweeps
-    while true; do rm *.raw *.swl; timeout 30s sweep.sh "$@"; sleep 1; date; done
+    sweep.sh --cont
 }
 bsubm() {
     if [ -n "$1" ]; then
@@ -260,7 +267,7 @@ bsubm() {
         if ping -c1 -w3 10.77.80.1 >/dev/null 2>&1; then
             dit
             cd update_tools
-            ./build-submit.sh
+            ./build-submit.sh -c master
             cd -
         else
             echo "Connect to camera"
@@ -289,7 +296,7 @@ bsub() {
         if ping -c1 -w3 10.77.80.1 >/dev/null 2>&1; then
             dit
             cd update_tools
-            ./build-submit.sh
+            ./build-submit.sh -c "$(cat ~/.fwb_chroot)"
             cd -
         else
             echo "Connect to camera"
@@ -583,4 +590,14 @@ function set-title() {
   fi
   TITLE="\[\e]2;$*\a\]"
   PS1=${ORIG}${TITLE}
+}
+
+ascp() {
+    sshTest
+    ret="$?"
+    if [ "$ret" -ne 0 ]; then
+        echo "Unable to SSH to camera"
+    else
+        scp "$@"
+    fi
 }

@@ -209,7 +209,7 @@ nnoremap <silent> <C-p> :CtrlPTag<CR>
 set wildignorecase
 set wildignore+=*.o,*.obj,*.class,*.compact,*.2d,*.json,*.png,*.plo,*.po,*.pdf,*.html,*.py,*.xml,*.jpg,*.jpeg,*.jar,*.graffle,*.zip,*.so,*.fw,*.3gp,*.mp4
 set wildignore+=20140422_new_src_SD_boot/**,20140603_fw_May_29_2014/**,image_quality/**
-nnoremap <silent> <leader>o ::CommandT ~/dev/<CR>
+nnoremap <silent> <leader>o ::CommandT ~/JetPack/64_TX2/Linux_for_Tegra/sources<CR>
 let g:CommandTMaxFiles = 500000
 let g:CommandTInputDebounce = 700
 let g:CommandTMaxCachedDirectories = 10
@@ -217,7 +217,7 @@ let g:CommandTHighlightColor="Visual"
 
 """"""""" NERDTree configs """"""""""""""""
 noremap <silent> <leader>N :NERDTreeFind<CR>
-noremap <silent> <leader>n :NERDTree<CR>
+noremap <silent> <leader>n :NERDTreeToggle<CR>
 let g:NERDTreeDirArrows = 1
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
@@ -518,7 +518,8 @@ nmap <M-a> :tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
 " --exclude=*usbx_device_controllers*
 let g:asyncrun_open = 10
 map <leader>U  :AsyncRun ~/dev/cscope/cscope-gen<CR>
-map <leader>u  :ccl<CR>:cscope reset<CR>:UpdateTags -R /home/phahn/dev/mp_vision/eos<CR><CR>
+" map <leader>u  :ccl<CR>:cscope reset<CR>:UpdateTags -R /home/phahn/JetPack/64_TX2/Linux_for_Tegra/sources/kernel/kernel<CR><CR>
+map <leader>u  :ccl<CR>:cscope reset<CR><CR>
 
 """""""""""""""" Leader key maps """""""""""""""""""""""
 
@@ -590,13 +591,16 @@ map <leader>r :OpenSession default<CR>
 
 
 " macvim hanging on gd
-map gd #
+" map gd #
 
 """""""""""""""""' linux keys """""""""""""""
 " vim doesn't do c-q for visual mode
 nnoremap <c-q> <c-v>
 
 vmap <c-c> "+y
+vmap <c-v> c<c-r>+<esc>
+nmap <c-v> i<c-r>+<esc>
+imap <c-v> <c-r>+<esc>
 
 
 highlight Ignore guifg=#002b36 guibg=#002b36
