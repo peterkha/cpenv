@@ -207,9 +207,9 @@ nnoremap <silent> <leader>b :CtrlPBuffer<CR>
 nnoremap <silent> <C-p> :CtrlPTag<CR>
 """"""""" ccommandT configuration """"""""""
 set wildignorecase
-set wildignore+=*.o,*.obj,*.class,*.compact,*.2d,*.json,*.png,*.plo,*.po,*.pdf,*.html,*.py,*.xml,*.jpg,*.jpeg,*.jar,*.graffle,*.zip,*.so,*.fw,*.3gp,*.mp4
-set wildignore+=20140422_new_src_SD_boot/**,20140603_fw_May_29_2014/**,image_quality/**
-nnoremap <silent> <leader>o ::CommandT ~/JetPack/64_TX2/Linux_for_Tegra/sources<CR>
+set wildignore+=*.o,*.obj,*.class,*.compact,*.2d,*.json,*.png,*.plo,*.po,*.pdf,*.html,*.xml,*.jpg,*.jpeg,*.jar,*.graffle,*.zip,*.so,*.fw,*.3gp,*.mp4
+"set wildignore+=20140422_new_src_SD_boot/**,20140603_fw_May_29_2014/**,image_quality/**
+nnoremap <silent> <leader>o ::CommandT ~/dev/<CR>
 let g:CommandTMaxFiles = 500000
 let g:CommandTInputDebounce = 700
 let g:CommandTMaxCachedDirectories = 10
@@ -222,7 +222,7 @@ let g:NERDTreeDirArrows = 1
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let g:NERDTreeGlyphReadOnly = "RO"
-
+let g:NERDTreeWinPos = "right"
 
 
 
@@ -434,7 +434,7 @@ imap <C-s> <esc>:w<CR>li
 noremap <C-Z> <C-x> 
 noremap <C-z> <C-a> 
 
-map <c-A> ggVG"+y
+" map <c-A> ggVG"+y
  
 
 
@@ -518,8 +518,9 @@ nmap <M-a> :tabe ~/temp/winepaste.txt<CR>ggdG"+p:w<CR>:bd<CR>
 " --exclude=*usbx_device_controllers*
 let g:asyncrun_open = 10
 map <leader>U  :AsyncRun ~/dev/cscope/cscope-gen<CR>
-" map <leader>u  :ccl<CR>:cscope reset<CR>:UpdateTags -R /home/phahn/JetPack/64_TX2/Linux_for_Tegra/sources/kernel/kernel<CR><CR>
 map <leader>u  :ccl<CR>:cscope reset<CR><CR>
+"map <leader>u  :ccl<CR>:cscope reset<CR>:UpdateTags -R /home/phahn/dev/mp_vision/modules<CR><CR>
+"map <leader>u  :ccl<CR>:cscope reset<CR><CR>
 
 """""""""""""""" Leader key maps """""""""""""""""""""""
 
@@ -541,11 +542,11 @@ map <leader>gu :GitGutterUndoHunk
 map [g :GitGutterPrevHunk<CR>
 map ]g :GitGutterNextHunk<CR>
 
-map <leader>_ :pta 
+map <leader>_ <c-w>g<c-]>
 map <leader>- <c-w><c-]><c-w>T
 "map <leader>} g<c-]>2<CR>zz
-map <leader>= g<c-]>
-map <leader>+ g<c-]>1<CR><CR>
+map <leader>+ g<c-]>
+map <leader>= g<c-]>1<CR><CR>
 map <leader>] <c-]>zz
 map <leader>[ <c-t>zz
 map <leader>' <c-w>}:ptjump<CR>
@@ -559,10 +560,11 @@ map <leader>/ :noh<cr>
 map <leader>t :TagbarToggle<CR>
 map <leader>f :TlistToggle<CR>
 
+map <leader>c :%y+<CR>
 vmap <leader>c "+y
 map <leader>C :execute CloseHiddenBuffers()<CR>
 
-" map <leader>m :cn<CR>zz
+" map <leader>m :cn<CR>zz   " use ]q and [q from unimpaired
 " map <leader>M :cp<CR>zz
 
 " vimrc auto open and write/source
@@ -582,7 +584,7 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
-map <leader>a :Agrep 
+map <leader>a :AsyncRun! grep -R -n 
 
 map <leader>r :OpenSession default<CR>
 
@@ -609,3 +611,7 @@ match Ignore /\r$/
 
 set pastetoggle=<F2>
 
+au BufNewFile,BufRead *.cu set filetype=cuda
+au BufNewFile,BufRead *.cuh set filetype=cuda
+
+set tags=./tags;,tags;
