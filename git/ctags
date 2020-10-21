@@ -2,6 +2,6 @@
 set -e
 PATH="/usr/local/bin:$PATH"
 trap 'rm -f "$$.tags"' EXIT
-git ls-files | grep "^modules" |\
+git ls-files | grep -v "^thirdparty/boost\|^thirdparty/OpenCV\|^thirdparty/eigen\|^thirdparty/protobuf\|^thirdparty/nvidia\|^gst-rtsp-server" | \
   ctags --tag-relative -L - -f"$$.tags" --languages=-javascript,sql
 mv "$$.tags" "tags"
