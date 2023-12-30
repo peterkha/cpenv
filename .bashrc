@@ -103,6 +103,11 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
+alias ssh_mpw='ssh -o StrictHostKeyChecking=no matterport@10.77.80.1'
+alias ssh_mpu='ssh -o StrictHostKeyChecking=no matterport@192.168.55.1'
+
+alias open=nautilus
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -128,10 +133,10 @@ bind "set show-all-if-ambiguous on"
 
 alias srb="source ~/.bashrc"
 
-export PATH=$PATH:~/bin:~/dev/mp_vision/tools/mcp
+export PATH=$PATH:~/bin:~/dev/zaya_app/testrail/mcp:~/dev/zaya_app/testrail
 export PATH="$PATH:"/opt/microchip/xc32/v1.43/bin""
 export PATH="$PATH:"/opt/microchip/xc16/v1.32/bin""
-export PATH="/opt/microchip/xc16/v1.11/bin":"~/mp_vision-build":$PATH
+export PATH="/opt/microchip/xc16/v1.11/bin":"$PATH"
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export CDPATH=$CDPATH:~/dev/:~/dev/zaya_app
@@ -146,6 +151,7 @@ export LEOS=/chroots/$(cat ~/.fwb_chroot)/root/build-dev/libeos.so
 export LEOSP=/chroots/$(cat ~/.fwb_chroot)/root/build-prod/libeos.so
 export LEOSM=/chroots/master/root/build-dev/libeos.so
 export LEOSMP=/chroots/master/root/build-prod/libeos.so
+export ZPKG=/home/phahn/docker-zaya/dist/*.tar.gz
 export LNX=~/dev/linux-imx6/ubuntunize/linux-3.14.52*
 export MPD=/home/phahn/matterport/
 export FLAGF=/home/phahn/bin/camera_manager.flagfile
@@ -175,7 +181,7 @@ parse_git_branch() {
     branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
     commit=$(git log 2> /dev/null | head -1 | awk '{print $2}')
     if [ "$branch" ]; then
-        echo " ($branch:${commit:0:5})"
+        echo " ($branch|${commit:0:5})"
     fi
 }
 cgrep() { 
@@ -210,9 +216,13 @@ fwcm() {
 fwc() {
     echo "fwb_chroot is $(cat ~/.fwb_chroot)"
     if [ -n "$1" ]; then
-        sudo chroot /chroots/$(cat ~/.fwb_chroot) cd /root/build-prod; CC=/usr/bin/aarch64-linux-gnu-gcc CXX=/usr/bin/aarch64-linux-gnu-g++ cmake -DCMAKE_BUILD_TYPE=Camera -DEOS_PRODUCTION=1 -DEOS_STRIP=1 -DPROTOBUF_INCLUDE_DIR=/root/mp_vision/thirdparty/protobuf/protobuf-3.2.0/src -DPROTOBUF_LIBRARY=/root/protobuf-3.2.0/libprotobuf.a -DPROTOBUF_PROTOC_EXECUTABLE=/root/protobuf-3.2.0-host-binaries/bin/protoc -DLIBUSB_1_INCLUDE_DIR=/root/libusb-build/include/libusb-1.0 -DLIBUSB_1_LIBRARY=/root/libusb-build/lib/libusb-1.0.so.0 /root/mp_vision
+        sudo chroot /chroots/$(cat ~/.fwb_chroot) 
+        cd /root/build-prod
+        CC=/usr/bin/arm-linux-gnueabihf-gcc CXX=/usr/bin/arm-linux-gnueabihf-g++ OPENNI2_ROOT=/root/OpenNI2-matterport/ cmake -DCMAKE_BUILD_TYPE=Camera -DPROTOBUF_INCLUDE_DIR=/root/mp_vision/thirdparty/protobuf/protobuf-3.2.0/src -DPROTOBUF_LIBRARY=/root/protobuf-3.2.0/libprotobuf.a -DPROTOBUF_PROTOC_EXECUTABLE=/root/protobuf-3.2.0-host-binaries/bin/protoc /root/mp_vision
     else
-        sudo chroot /chroots/$(cat ~/.fwb_chroot) cd /root/build-dev; CC=/usr/bin/aarch64-linux-gnu-gcc CXX=/usr/bin/aarch64-linux-gnu-g++ cmake -DCMAKE_BUILD_TYPE=Camera -DPROTOBUF_INCLUDE_DIR=/root/mp_vision/thirdparty/protobuf/protobuf-3.2.0/src -DPROTOBUF_LIBRARY=/root/protobuf-3.2.0/libprotobuf.a -DPROTOBUF_PROTOC_EXECUTABLE=/root/protobuf-3.2.0-host-binaries/bin/protoc -DLIBUSB_1_INCLUDE_DIR=/root/libusb-build/include/libusb-1.0 -DLIBUSB_1_LIBRARY=/root/libusb-build/lib/libusb-1.0.so.0 /root/mp_vision
+        sudo chroot /chroots/$(cat ~/.fwb_chroot)
+        cd /root/build-dev 
+        CC=/usr/bin/arm-linux-gnueabihf-gcc CXX=/usr/bin/arm-linux-gnueabihf-g++ OPENNI2_ROOT=/root/OpenNI2-matterport/ cmake -DCMAKE_BUILD_TYPE=Camera -DEOS_PRODUCTION=1 -DPROTOBUF_INCLUDE_DIR=/root/mp_vision/thirdparty/protobuf/protobuf-3.2.0/src -DPROTOBUF_LIBRARY=/root/protobuf-3.2.0/libprotobuf.a -DPROTOBUF_PROTOC_EXECUTABLE=/root/protobuf-3.2.0-host-binaries/bin/protoc /root/mp_vision
     fi
 }
 cfwr(){
@@ -250,7 +260,7 @@ dit() {
     TOOLS_DIR="$MPV/tools"
     KEYS="--cert $TOOLS_DIR/keys/mcp-client-cert.crt --key $TOOLS_DIR/keys/mcp-client-cert.key"
     get_state=
-    while [ ! $get_state ]; do
+    while [ ! "$get_state" ]; do
         get_state=$(curl -m 1 -k --ciphers ALL $KEYS https://$CAMERA_IP/getState 2>/dev/null)
         get_state=$(echo "$get_state" | sed 's|\\"|"|g' | sed 's|\\\\\\||g')
     done
@@ -260,6 +270,10 @@ dit() {
     $CURL_CMD "disableIdleTimeouts" 
     echo "$get_state"
 
+}
+
+gets() {
+    curl_camera.sh getState
 }
 mchr() {
     MPOINT=/chroots/$(cat ~/.fwb_chroot)/root/mp_vision
@@ -350,10 +364,8 @@ shad() {
 }
 
 resub() {
-    dit
-    cd mp_vision/tools/update_tools
-    ./submit-apply-update.sh ../keys home-matterport/update-*.tar
-    cd -
+    echo "submit $(ls -1 ~/docker-zaya/dist/zaya*tar.gz | head -1)"
+    fw-update-wifi.sh "$(ls -1 ~/docker-zaya/dist/zaya*tar.gz | head -1)"
 }
 
 function set-title() {
@@ -376,7 +388,7 @@ ascp() {
 LFT422=/home/phahn/JetPack_4.2.2_Nano/Linux_for_Tegra
 LFT43=/home/phahn/JetPack_4.3_Nano/Linux_for_Tegra
 
-source /home/phahn/cam_tools/mcp/common.sh
+source /home/phahn/dev/zaya_app/testrail/mcp/common.sh
 
 append_authorized() {
     cat ~/.ssh/id_rsa.pub | ssh zayawifi tee -a .ssh/authorized_keys
@@ -385,3 +397,24 @@ append_authorized() {
 sett() {
     set-title $(basename $(pwd))
 }
+
+cat_idrsa() {
+    ssh zayawifi mkdir .ssh
+    if [ $? -ne 0 ]; then
+      ssh gammawifi mkdir .ssh
+      cat ~/.ssh/id_rsa.pub | ssh gammawifi tee -a .ssh/authorized_keys
+    else
+      cat ~/.ssh/id_rsa.pub | ssh zayawifi tee -a .ssh/authorized_keys
+    fi
+}
+
+
+# encountered files that should have been pointers
+fix_gitlfs() {
+git lfs uninstall
+git reset --hard
+git lfs install
+git lfs pull
+}
+
+alias gpgx='gpg -d testrail/matterport_pass.gpg  | xclip -selection clipboard'

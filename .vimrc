@@ -142,7 +142,6 @@ execute pathogen#infect()
 "let g:validator_cpp_checkers = ['clang-tidy']
 "let g:validator_clang_tidy_binary = '/usr/bin/clang-tidy-3.5'
 
-
 """"""""" cscope quickfix """""""""
 
 " use :cn and :cp to move between tags when working with cscope result list
@@ -421,6 +420,8 @@ map <M-S-i> :tabp<CR>
 map W :tabnext<cr>
 map Q :tabprev<CR>
 
+map T :tabclose<CR>Q
+
 
 " backspace in normal mode
 nmap <BS> a<BS>
@@ -535,10 +536,10 @@ map <leader>j <c-w>j
 "unmap <leader>hp
 "unmap <leader>hu
 "unmap <leader>hs
-map <leader>gp :GitGutterPreviewHunk
-map <leader>gr :GitGutterRevertHunk
-map <leader>gs :GitGutterStageHunk
-map <leader>gu :GitGutterUndoHunk
+map <leader>gp :GitGutterPreviewHunk<CR>
+map <leader>gr :GitGutterRevertHunk<CR>
+map <leader>gs :GitGutterStageHunk<CR>
+map <leader>gu :GitGutterUndoHunk<CR>
 map [g :GitGutterPrevHunk<CR>
 map ]g :GitGutterNextHunk<CR>
 
@@ -546,7 +547,7 @@ map <leader>_ <c-w>g<c-]>
 map <leader>- <c-w><c-]><c-w>T
 "map <leader>} g<c-]>2<CR>zz
 map <leader>+ g<c-]>
-map <leader>= g<c-]>1<CR><CR>
+map <leader>= g<c-]>1<CR>:sleep 1<CR><CR>
 map <leader>] <c-]>zz
 map <leader>[ <c-t>zz
 map <leader>' <c-w>}:ptjump<CR>
@@ -571,6 +572,9 @@ map <leader>C :execute CloseHiddenBuffers()<CR>
 nmap <leader>S :tabe $MYVIMRC<CR>
 map <leader>s :source ~/.gvimrc<CR>
 
+" go back with your right hand during navigation
+map <leader>O <c-o>
+
 
 " Go to tab by number
 noremap <leader>1 1gt
@@ -584,11 +588,13 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
-map <leader>a :AsyncRun! grep -R -n 
+map <leader>a :AsyncRun! ag 
 
 map <leader>r :OpenSession default<CR>
 
+map <leader>w :tabclose<CR>
 
+map <leader>i f,a<CR><ESC>
 """"""""""""""" bullshit workarounds """"""""""""""
 
 
@@ -599,10 +605,11 @@ map <leader>r :OpenSession default<CR>
 " vim doesn't do c-q for visual mode
 nnoremap <c-q> <c-v>
 
+nmap <c-v> "+P
 vmap <c-c> "+y
-vmap <c-v> c<c-r>+<esc>
-nmap <c-v> i<c-r>+<esc>
-imap <c-v> <c-r>+<esc>
+vmap <c-v> x<esc><c-v>
+imap <c-v> <esc><c-v>i
+imap <c-s-v> <c-r>+
 
 
 highlight Ignore guifg=#002b36 guibg=#002b36
@@ -615,3 +622,10 @@ au BufNewFile,BufRead *.cu set filetype=cuda
 au BufNewFile,BufRead *.cuh set filetype=cuda
 
 set tags=./tags;,tags;
+map <leader>e :set tags=./tags;,tags;<CR>
+
+map <CR> <Nop>
+
+" when you see inconsistent highlighting  see
+" https://vi.stackexchange.com/questions/27450/syntax-coloring-is-inaccurate-for-html-files-with-css-code-in-it
+map <leader>y :syn sync fromstart<CR>

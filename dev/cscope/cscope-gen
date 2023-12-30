@@ -7,7 +7,7 @@ find ~/dev/pic_firmware -iname '*.[CH]' \
        -o -iname '*.cc' \
        -o -iname '*.hpp' | sed 's/.*/"&"/' > "cscope.files"
 
-find ~/dev/mp_vision/eos -iname '*.py' \
+find ~/dev/mp_vision/modules -iname '*.py' \
        -o -iname '*.java' \
        -o -iname '*.[CH]' \
        -o -iname '*.cpp' \
@@ -19,21 +19,37 @@ find ~/dev/mp_vision/eos -iname '*.py' \
 #       -o -type d \( -path "*20140603_fw_May_29_2014" \) -prune \
 #       -o -type d \( -path "*20140422_new_src_SD_boot" \) -prune > "cscope.files"
 
-find ~/dev/linux-imx6 -iname '*.py' \
+#find ~/dev/linux-imx6 -iname '*.py' \
+#       -o -iname '*.java' \
+#       -o -iname '*.[CH]' \
+#       -o -iname '*.cpp' \
+#       -o -iname '*.cc' \
+#       -o -iname '*.hpp' >> "cscope.files"
+
+find ~/dev/mpv_build -iname '*.py' \
        -o -iname '*.java' \
        -o -iname '*.[CH]' \
        -o -iname '*.cpp' \
        -o -iname '*.cc' \
        -o -iname '*.hpp' >> "cscope.files"
 
-find ~/mp_vision-build -iname '*.py' \
+#find ~/docker/eos-build-dev/ -iname '*.py' \
+#       -o -iname '*.java' \
+#       -o -iname '*.[CH]' \
+#       -o -iname '*.cpp' \
+#       -o -iname '*.cc' \
+#       -o -iname '*.hpp' >> "cscope.files"
+
+find ~/dev/zaya_app -iname '*.py' \
        -o -iname '*.java' \
        -o -iname '*.[CH]' \
        -o -iname '*.cpp' \
        -o -iname '*.cc' \
-       -o -iname '*.hpp' >> "cscope.files"
+       -o -iname '*.hpp' \
+       -o -type d \( -path "*modules" \) -prune \
+       -o -type d \( -path "*thirdparty" \) -prune >> "cscope.files"
 
-find /chroots/arm-cross-gcc5/root/build-dev/ -iname '*.py' \
+find ~/dev/zaya_mcu -iname '*.py' \
        -o -iname '*.java' \
        -o -iname '*.[CH]' \
        -o -iname '*.cpp' \
