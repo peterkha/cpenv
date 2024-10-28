@@ -33,7 +33,7 @@ let mapleader = ' '
 
 """"""""" color/appearance configs """"""""""
 "set transparency=10
-colorscheme zellner
+colorscheme jellybeans
 
 " highlight green text against blue 
 :hi Visual term=reverse cterm=reverse gui=bold guifg=#206040 guibg=LightBlue   
@@ -79,7 +79,7 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 Plugin 'tpope/vim-fugitive'
-Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'https://github.com/wincent/command-t.git'
 Plugin 'https://github.com/kien/ctrlp.vim.git'
 Plugin 'https://github.com/rgarver/Kwbd.vim.git'
 Plugin 'https://github.com/vim-scripts/MultipleSearch.git'
