@@ -420,7 +420,7 @@ map <M-S-i> :tabp<CR>
 map W :tabnext<cr>
 map Q :tabprev<CR>
 
-map T :tabclose<CR>Q
+map T :tabclose<CR>
 
 
 " backspace in normal mode
@@ -558,6 +558,7 @@ map <leader>" :pc<CR>
 
 map <leader>/ :noh<cr>
 
+map <leader>T :tabclose<CR>Q
 map <leader>t :TagbarToggle<CR>
 map <leader>f :TlistToggle<CR>
 
