@@ -1,0 +1,90 @@
+#!/bin/bash
+
+
+neofirmwareDirectoyMatch=`echo $PWD | grep "pancam/hardware/neofirmware$"` # match pancam/hardware/neofirmware[End of string]
+if [ -z $neofirmwareDirectoyMatch ]; then
+  echo "Run this script from the neofirmware directory!"
+  exit 1
+fi
+
+set -e
+
+neofwhash=`git log --pretty=oneline --abbrev-commit -- . | head -c 7`
+
+fwprefix=FW
+if [ "$1" == "21-1" ]; then
+  imagedir=$amba21neo
+  imagename=$sysdsp
+  binname=AmbaSysFW.bin
+  fwmiddlefix=-DVT1
+elif [ "$1" == "21-2uc" ]; then
+  imagedir=$amba212uc
+  imagename=$sysdsp
+  binname=AmbaSysFW.bin
+  fwmiddlefix=DVT1
+elif [ "$1" == "21-2" ]; then
+  imagedir=$amba212neo
+  imagename=$sysdsp
+  alternateimagename=$sysdsp
+  binname=AmbaSysFW_21-2.bin
+  fwmiddlefix=Factory
+elif [ "$1" == "21-1uc" ]; then
+  imagedir=$amba21uc
+  imagename=$sysdsp
+  binname=AmbaSysFW_21-2.bin
+  fwmiddlefix=Factory
+elif [ "$1" == "evk" ]; then
+  imagedir=$amba212evk
+  imagename=$evksys
+  binname=AmbaSysFW.bin
+  fwmiddlefix=EVK
+  allout=$evkallout
+  sysout=$evksysout
+else
+  echo "bad 1st arg (21-1, 21-2, 21-1uc, 21-2uc, evk)"
+  exit 1
+fi
+
+#now=$(date +"%Y-%m-%d")
+#if [[ "$3" == "staging" ]]; then
+  #destinationdir=/jaunt/groups/hardware/staging_fw_releases/$now
+#else
+  #destinationdir=/jaunt/groups/hardware/firmware_releases/$now
+#fi
+#set +e
+#mkdir "$destinationdir"
+#set -e
+
+
+
+foldername=$fwprefix-$fwmiddlefix-$neofwhash
+zipname=$foldername.zip
+
+
+sysfwbinfile=$imagedir/$fwprogbin/$binname
+fullbinpath=$imagedir/$imagename
+if [ ! -f "$fullbinpath" ]; then
+  echo "couldn't find $fullbinpath, using alternate"
+  fullbinpath=$imagedir/$alternateimagename
+  echo "alternate is: $fullbinpath"
+fi
+alloutfile=$imagedir/$allout
+sysoutfile=$imagedir/$sysout
+
+echo $fullbinpath
+echo $alloutfile
+echo $sysoutfile
+
+ls -la $fullbinpath
+ls -la $alloutfile
+ls -la $sysoutfile
+
+set -v
+
+cp $fullbinpath $sysfwbinfile
+mkdir $foldername
+cp $sysfwbinfile $alloutfile $sysoutfile $foldername
+#zip $zipname -r $foldername
+
+
+

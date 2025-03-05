@@ -1,0 +1,74 @@
+#!/bin/bash
+
+cd $neolib
+
+if [ "$1" == "21-1" ]; then
+  imagedir=$amba21neo
+elif [ "$1" == "21-2" ]; then
+  imagedir=$amba212neo
+elif [ "$1" == "21-1uc" ]; then
+  imagedir=$amba21uc
+elif [ "$1" == "21-2uc" ]; then
+  imagedir=$amba212uc
+elif [ "$1" == "183" ]; then
+  imagedir=$amba183
+else
+  echo "bad 1st arg (21-1, 21-2, 21-1uc, 21-2uc, 183)"
+  exit 1
+fi
+
+if [ "$2" == "sys" ]; then
+  imagename=$sysfw
+elif [ "$2" == "sysdsp" ] ; then
+  imagename=$sysdsp
+elif [ "$2" == "bstsys" ] ; then
+  imagename=$bstsys
+else
+  echo "request sys sysdsp bstsys"
+  exit 1
+fi
+
+if [ "$3" == "debug" ]; then
+  executable=./build_debug/cmdLine/UpdateFW
+else
+  executable=./build/cmdLine/UpdateFW
+fi
+
+fullpath=$imagedir/$imagename
+
+echo $fullpath
+
+lastFwup=$(cat $HOME/.fwup)
+currentFwup=$(ls -la $fullpath)
+echo "last: $lastFwup"
+
+if [ "$lastFwup" == "$currentFwup" ]; then
+  while true; do 
+    echo "curr: $currentFwup"
+    echo "press any non-enter key to continue with same FW"
+    read -n 1 -t 1 key
+    if [ -n "$key" ]; then 
+      echo "continuing"; 
+      break; 
+    fi 
+    currentFwup=$(ls -la $fullpath)
+    if [ "$lastFwup" != "$currentFwup" ]; then
+      echo "new file found: $currentFwup"
+      break;
+    fi
+  done
+else 
+  echo "curr: $currentFwup"
+fi
+
+set -e
+
+
+$executable $fullpath
+ls -la $fullpath > $HOME/.fwup
+
+
+
+cd -
+
+

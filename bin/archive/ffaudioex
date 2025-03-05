@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ffmpeg -i a9999_bc9da1ed-S0577-T0001-M014-123412341234-C001.mov  -vn -acodec copy  a9999_bc9da1ed-S0577-T0001-M014-123412341234-C001.aac
+ffmpeg -i a9999_bc9da1ed-S0577-T0001-M015-awefjiopawef-C001.mov  -vn -acodec copy  a9999_bc9da1ed-S0577-T0001-M015-awefjiopawef-C001.aac
+ffmpeg -i a9999_bc9da1ed-S0577-T0002-M014-123412341234-C001.mov  -vn -acodec copy  a9999_bc9da1ed-S0577-T0002-M014-123412341234-C001.aac
+ffmpeg -i a9999_bc9da1ed-S0577-T0002-M015-awefjiopawef-C001.mov  -vn -acodec copy  a9999_bc9da1ed-S0577-T0002-M015-awefjiopawef-C001.aac
+ffmpeg -i a9999_bc9da1ed-S0577-T0003-M014-123412341234-C001.mov  -vn -acodec copy  a9999_bc9da1ed-S0577-T0003-M014-123412341234-C001.aac
+ffmpeg -i a9999_bc9da1ed-S0577-T0003-M015-awefjiopawef-C001.mov  -vn -acodec copy  a9999_bc9da1ed-S0577-T0003-M015-awefjiopawef-C001.aac

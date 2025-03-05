@@ -1,0 +1,1 @@
+find /Volumes -iname Untitled* | while read f; do diskutil eraseVolume FAT32 UNTITLED nonbootable "$f"; done;

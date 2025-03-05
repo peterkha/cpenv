@@ -1,0 +1,5 @@
+ls -d1 /Volumes/* | grep "NO NAME\|JAUNT_MEDIA" | while read f;
+do
+  echo "cleaning $f"
+  rm -rf "$f"/*
+done

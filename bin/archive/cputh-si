@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+## Get the Process/App names from Activity Monitor and put them here
+apps=("wine")
+# Set the respective limits here
+limits=( 30 )
+
+
+while true; do
+  for app in ${apps}; do
+    for limit in ${limits}; do
+      for pid in $(~/bin/pidof ${app}); do
+        sudo ~/bin/cputhrottle ${pid} ${limit}
+        exit 0
+      done
+    done
+  done
+  sleep 10
+done

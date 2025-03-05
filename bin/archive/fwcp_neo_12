@@ -1,0 +1,61 @@
+rm -rf /Volumes/Untitled/*
+rm -rf /Volumes/Untitled\ 1/*
+rm -rf /Volumes/Untitled\ 2/*
+rm -rf /Volumes/Untitled\ 3/*
+rm -rf /Volumes/Untitled\ 4/*
+rm -rf /Volumes/Untitled\ 5/*
+rm -rf /Volumes/Untitled\ 6/*
+rm -rf /Volumes/Untitled\ 7/*
+rm -rf /Volumes/Untitled\ 8/*
+rm -rf /Volumes/Untitled\ 8/*
+rm -rf /Volumes/Untitled\ 9/*
+rm -rf /Volumes/Untitled\ 10/*
+rm -rf /Volumes/Untitled\ 11/*
+
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 1/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 2/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 3/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 4/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 5/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 6/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 7/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 8/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 9/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 10/AmbaSysFW.bin &
+cp -paf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/AmbaSYS.devfw /Volumes/Untitled\ 11/AmbaSysFW.bin &
+wait
+
+cd ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-Neo/A9/Common/FwProg/bin/
+ls -la AmbaCamera_1.bin
+ls -la *.devfw
+cd -
+ls -la /Volumes/Untitled/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 1/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 2/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 3/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 4/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 5/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 6/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 7/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 8/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 9/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 10/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 11/AmbaSysFW.bin
+
+diskutil unmountdisk /dev/disk2
+diskutil unmountdisk /dev/disk3
+diskutil unmountdisk /dev/disk4
+diskutil unmountdisk /dev/disk5
+diskutil unmountdisk /dev/disk6
+diskutil unmountdisk /dev/disk7
+diskutil unmountdisk /dev/disk8
+diskutil unmountdisk /dev/disk9
+diskutil unmountdisk /dev/disk10
+diskutil unmountdisk /dev/disk11
+diskutil unmountdisk /dev/disk12
+diskutil unmountdisk /dev/disk13
+
+sleep 8
+exit 0
+

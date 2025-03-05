@@ -1,0 +1,27 @@
+#!/bin/bash
+echo $1
+UARTS=`ls /dev/tty.usbmodem$1*`
+UARTLOG=~/dev/uart-logs/`date +%Y.%m.%d-%H.%M.%S%Z`.log
+found=""
+for uart in $UARTS; do
+    busy=`fuser $uart 2>&1 | cut -d ':' -f 2`
+    if [ -n "$busy" -a "$busy" != " " ]; then
+        echo $uart : busy
+    else
+        echo $uart : open
+        found=1
+        break
+    fi  
+done
+
+if [ "$found" == "1" ]; then
+    if [ -e $uart ]; then
+        unlink ~/dev/uart-logs/currentmodem1.log
+        ln -s $UARTLOG ~/dev/uart-logs/currentmodem1.log
+        minicom -C $UARTLOG -b 115200 -c off -D $uart
+    else
+        echo Free serial terminal not found
+    fi
+else
+    echo Free serial terminal not found
+fi

@@ -1,0 +1,26 @@
+#!/bin/bash
+UARTS=`ls /dev/ttyUSB0`
+UARTLOG=~/matterport/uart-logs/`date +%Y.%m.%d-%H.%M.%S%Z`.log
+found=""
+for uart in $UARTS; do
+    busy=`fuser $uart 2>&1 | cut -d ':' -f 2`
+    if [ -n "$busy" -a "$busy" != " " ]; then
+        echo $uart : busy
+    else
+        echo $uart : open
+        found=1
+        break
+    fi  
+done
+
+if [ "$found" == "1" ]; then
+    if [ -e $uart ]; then
+        unlink ~/matterport/uart-logs/current1.log
+        ln -s $UARTLOG ~/matterport/uart-logs/current1.log
+        minicom -C $UARTLOG -b 115200 -c on -D $uart
+    else
+        echo Free serial terminal not found
+    fi
+else
+    echo Free serial terminal not found
+fi

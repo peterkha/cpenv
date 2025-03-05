@@ -1,0 +1,21 @@
+cleancards
+
+cp -apf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-Neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw /Volumes/Untitled/AmbaSysFW.bin &
+cp -apf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-Neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw /Volumes/Untitled\ 1/AmbaSysFW.bin &
+cp -apf ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-Neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw /Volumes/Untitled\ 2/AmbaSysFW.bin &
+wait
+
+cd ~/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-Neo/A9/Common/FwProg/bin/
+ls -la AmbaCamera_1.bin
+ls -la *.devfw
+cd -
+ls -la /Volumes/Untitled/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 1/AmbaSysFW.bin
+ls -la /Volumes/Untitled\ 2/AmbaSysFW.bin
+
+diskutil unmountdisk /dev/disk2
+diskutil unmountdisk /dev/disk3
+diskutil unmountdisk /dev/disk4
+
+sleep 8
+exit 0

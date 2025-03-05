@@ -1,0 +1,6 @@
+if [ -d /Volumes/UNTITLED ]; then
+  echo "creating poe"
+  mkdir /Volumes/UNTITLED/Poe
+  cp -r  ~/Library/Application\ Support/Pillars\ of\ Eternity/Saved\ Games/*.*  /Volumes/UNTITLED/Poe
+fi
+

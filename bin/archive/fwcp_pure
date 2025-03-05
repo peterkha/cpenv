@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#cleancards
+
+targetVol=$(ls -d1 /Volumes/* | grep "NO NAME\|JAUNT_MEDIA")
+
+if [ -z "$targetVol" ]; then
+  echo "no SD card found."
+  echo "source file:
+$neo/AmbaRelease_21-2-pure/$sysdsp "
+  exit 1
+fi
+
+cp -apf $neo/AmbaRelease_21-2-pure/$sysdsp "$targetVol/AmbaSysFW.bin" &
+wait
+
+cd $neo/AmbaRelease_21-2-pure/
+#ls -la AmbaCamera_1.bin
+ls -la $sysdsp
+cd -
+ls -la "$targetVol/AmbaSysFW.bin"
+
+exit 0
+
+

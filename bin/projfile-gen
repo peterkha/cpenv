@@ -1,0 +1,69 @@
+#!/bin/sh
+
+OUTPUT=~/dev/projfile-list.txt
+
+echo "" > "$OUTPUT"
+
+find ~/dev/pic_firmware -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.hpp' | sed 's/.*/"&"/' >> "$OUTPUT"
+
+find ~/dev/mp_vision/eos -name '*.py' \
+       -o -iname '*.java' \
+       -o -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.proto' \
+       -o -iname '*.hpp'  | sed 's/.*/"&"/' >> "$OUTPUT"
+
+find ~/dev/mp_vision/iOS -name '*.py' \
+       -o -iname '*.java' \
+       -o -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.proto' \
+       -o -iname '*.hpp'  | sed 's/.*/"&"/' >> "$OUTPUT"
+
+find ~/dev/mp_vision/thirdparty/OpenNI2 -name '*.py' \
+       -o -iname '*.java' \
+       -o -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.proto' \
+       -o -iname '*.hpp'  | sed 's/.*/"&"/' >> "$OUTPUT"
+
+find ~/dev/mp_vision/thirdparty/OpenCL* -name '*.py' \
+       -o -iname '*.java' \
+       -o -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.proto' \
+       -o -iname '*.hpp'  | sed 's/.*/"&"/' >> "$OUTPUT"
+
+find ~/dev/mp_vision/thirdparty/OpenCV/iOS-3.2.0/source/include -name '*.py' \
+       -o -iname '*.java' \
+       -o -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.proto' \
+       -o -iname '*.hpp'  | sed 's/.*/"&"/' >> "$OUTPUT"
+
+#find ~/dev/linux-imx6 -name '*.py' \
+       #-o -iname '*.java' \
+       #-o -iname '*.[CH]' \
+       #-o -iname '*.cpp' \
+       #-o -iname '*.cc' \
+       #-o -iname '*.hpp' | sed 's/.*/"&"/' >> "$OUTPUT"
+#
+find ~/mp_vision-build -name '*.py' \
+       -o -iname '*.java' \
+       -o -iname '*.[CH]' \
+       -o -iname '*.cpp' \
+       -o -iname '*.cc' \
+       -o -iname '*.proto' \
+       -o -iname '*.hpp' | sed 's/.*/"&"/' >> "$OUTPUT"
+
+
+sed -i 's|\/|\\|g' "$OUTPUT"
+sed -i 's|^"|"z:|g' "$OUTPUT"

@@ -1,0 +1,13 @@
+#cleancards
+
+targetVol=$(ls -d1 /Volumes/* | grep "NO NAME\|JAUNT_MEDIA")
+
+cp -apf $neo/AmbaRelease_21-2-evk/$sysdsp "$targetVol/AmbaSysFW.bin" &
+wait
+
+cd $neo/AmbaRelease_21-2-evk/
+#ls -la AmbaCamera_1.bin
+ls -la "$neo/AmbaRelease_21-2-evk/$sysdsp"
+ls -la "$targetVol/AmbaSysFW.bin"
+
+exit 0

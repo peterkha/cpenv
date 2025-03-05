@@ -1,0 +1,13 @@
+#!/bin/bash
+
+neofirmwareDirectoyMatch=`echo $PWD | grep "pancam/hardware/neofirmware$"` # match pancam/hardware/neofirmware[End of string]
+if [ -z $neofirmwareDirectoyMatch ]; then
+  echo "Run this script from the neofirmware directory!"
+  exit 1
+fi
+
+
+rm -rf FW-*
+prepRelease1 evk
+prepRelease1 21-2
+prepRelease1 21-2uc

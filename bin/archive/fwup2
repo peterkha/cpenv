@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+cd $neolib
+
+if [ "$2" == "build" ]; then
+  ./buildnow.sh debug
+fi
+
+if [ "$2" == "debug" ]; then
+
+if [ "$1" == "sys" ]; then
+  ls -la /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/AmbaSYS.devfw 
+  ./build_debug/cmdLine/UpdateFW /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/AmbaSYS.devfw all
+elif [ "$1" == "all" ]; then
+  ls -la /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw
+  ./build_debug/cmdLine/UpdateFW /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw all
+else
+  echo Specify sys or all
+fi
+
+else
+
+if [ "$1" == "sys" ]; then
+  ls -la /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/AmbaSYS.devfw 
+  ./build/cmdLine/UpdateFW /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/AmbaSYS.devfw all
+elif [ "$1" == "all" ]; then
+  ls -la /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw
+  ./build/cmdLine/UpdateFW /Users/peterh/dev/mac/pancam/hardware/neofirmware/AmbaRelease_21-2-neo/A9/Common/FwProg/bin/Amba_BST_BLD_SDF_SYS_DSP_ROM.devfw all
+else
+  echo Specify sys or all
+fi
+
+fi
+
+cd -
+
+

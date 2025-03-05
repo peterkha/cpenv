@@ -1,0 +1,106 @@
+#!/bin/bash
+
+set -e
+
+BKENV=~/Desktop/backup_env
+if [ ! -d $BKENV ]; then
+    mkdir $BKENV
+fi
+
+# karabiner
+#  delay command-q
+# cp /Users/peterh/Library/Application\ Support/Karabiner/private.xml $BKENV/
+
+
+# keyboard settings
+#  function keys lock
+#  modifier keys
+#  launchpad ctrl-apple-space
+#  desktop left/right
+#  shift-apple m - open macvim buffer with selection
+
+
+# seil
+#  change caps lock key to keycode 59 (for goldtouch mac keyboard bottom left key)
+
+
+# hyperswitch
+#   free app switch like windows
+
+
+# better touch tool
+#   option-command move window
+#   ctrl-option-command resize window
+
+# bash
+cp $PSF/.bash_profile $BKENV
+cp ~/.bashrc $BKENV
+
+# git
+#cp ~/.git-completion.bash $BKENV/git-completion.bash
+cp ~/.gitconfig $BKENV
+#cp ~/.gitignore_global $BKENV/gitignore_global
+
+#cp -r ~/dev/mac/pancam/.git/hooks $BKENV/
+#cp ~/dev/mac/pancam/.git/config $BKENV/git_pancam_config
+
+# vim
+cp -r /home/phahn/.vim $BKENV/
+
+cp ~/.vimrc $BKENV
+cp ~/.gvimrc $BKENV
+
+# source insight
+#mkdir "$BKENV/SI4"
+#cp -r ~/Documents/Source\ Insight\ 4.0/Settings $BKENV/SI4
+#cp "/home/phahn/.PlayOnLinux/wineprefix/SI4.0/drive_c/users/Public/Application Data/Source Insight/4.0/si4.lic" $BKENV/SI4
+
+
+cp -r ~/dev/zaya_app/.git/hooks $BKENV/
+
+
+cp -r ~/dev/cscope/cscope-gen $BKENV/
+
+# hex fiend
+# p4merge
+# cputhrottle
+# evoluent cp, paste, mission control
+# iterm
+#  liquidcarbon or liquidcarbontransparent
+# rdm monitor resolution change
+
+
+# scripts
+cp -r ~/bin $BKENV/
+cp $PSF/Desktop/snippets.txt $BKENV/
+
+
+# links
+cp -r $PSF/Desktop/links $BKENV/
+#cp -r ~/Desktop/usb $BKENV/
+#rm -rf $BKENV/usb/USB_Package_R21
+
+
+#windows
+#   dsynchronize
+#   conemu
+#cp ~/Downloads/ConEmu.xml $BKENV/
+#   dexpot
+#   kde mover-sizer
+#   gitbash
+
+
+# ctags
+cp ~/ctags.cnf $BKENV/
+
+
+
+# 
+
+
+cd ~/Desktop/
+zip -r backup_env.zip backup_env/
+cp backup_env.zip $PSF/Desktop/backup
+rm -rf backup_env
+cd -
+

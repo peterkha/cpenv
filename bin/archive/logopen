@@ -1,0 +1,32 @@
+rm /Volumes/UNTITLED/*.swp
+rm /Volumes/UNTITLED\ 1/*.swp
+rm /Volumes/UNTITLED\ 2/*.swp
+rm /Volumes/UNTITLED\ 3/*.swp
+rm /Volumes/UNTITLED\ 4/*.swp
+rm /Volumes/UNTITLED\ 5/*.swp
+rm /Volumes/UNTITLED\ 6/*.swp
+rm /Volumes/UNTITLED\ 7/*.swp
+rm /Volumes/UNTITLED\ 8/*.swp
+rm /Volumes/UNTITLED\ 9/*.swp
+rm /Volumes/UNTITLED\ 10/*.swp
+rm /Volumes/UNTITLED\ 11/*.swp
+
+
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 1/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 2/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 3/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 4/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 5/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 6/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 7/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 8/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 9/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 10/log.txt
+gvim --remote-tab-silent --servername VIM3 /Volumes/UNTITLED\ 11/log.txt
+
+wait
+
+echo "COMPLETE"
+
+sleep 5

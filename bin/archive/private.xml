@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<root>
+    <appdef>
+        <appname>SOURCEINSIGHT</appname>
+        <equal>com.yourcompany.yourapp_14035503739750</equal>
+    </appdef>
+    <appdef>
+        <appname>iterm2</appname>
+        <equal>com.googlecode.iterm2</equal>
+    </appdef>
+    <item>
+      <name>Help Key to CapsLock</name>
+      <identifier>private.help2capslock</identifier>
+      <autogen>__KeyToKey__ KeyCode::HELP, KeyCode::CAPSLOCK</autogen>
+    </item>
+    <item>
+      <name>Application Key to CapsLock</name>
+      <identifier>private.pc_application2capslock</identifier>
+      <autogen>__KeyToKey__ KeyCode::PC_APPLICATION, KeyCode::CAPSLOCK</autogen>
+    </item>
+    <item>
+        <name>re-locate end, pageup, pagedown</name>
+        <identifier>private.relocate_end_pgup_pgdwn</identifier>
+        <autogen>__KeyToKey__ KeyCode::PAGEUP, KeyCode::END</autogen>
+        <autogen>__KeyToKey__ KeyCode::PAGEDOWN, KeyCode::PAGEUP</autogen>
+        <autogen>__KeyToKey__ KeyCode::END, KeyCode::PAGEDOWN</autogen>
+    </item>
+    <item>
+      <name>Peter's Customized PC Style Copy/Paste, excepting source insight</name>
+      <appendix>(Control+C to Command_L+C)</appendix>
+      <appendix>(Control+V to Command_L+V)</appendix>
+      <appendix>(Control+X to Command_L+X)</appendix>
+      <appendix></appendix>
+      <appendix>{{ PC_STYLE_BINDINGS_IGNORE_APPS_DESCRIPTION }}</appendix>
+      <identifier>remap.peters_pc_style_copy_paste</identifier>
+      <not>{{ PC_STYLE_BINDINGS_IGNORE_APPS }},SOURCEINSIGHT</not>
+      {{ PC_STYLE_BINDINGS_IGNORE_EXTRA }}
+      <autogen>
+        __KeyToKey__
+        KeyCode::C, MODIFIERFLAG_EITHER_LEFT_OR_RIGHT_CONTROL, KeyCode::C, ModifierFlag::COMMAND_L, </autogen>
+      <autogen>
+        __KeyToKey__
+        KeyCode::V, MODIFIERFLAG_EITHER_LEFT_OR_RIGHT_CONTROL,
+        KeyCode::V, ModifierFlag::COMMAND_L,
+      </autogen>
+      <autogen>
+        __KeyToKey__
+        KeyCode::X, MODIFIERFLAG_EITHER_LEFT_OR_RIGHT_CONTROL,
+        KeyCode::X, ModifierFlag::COMMAND_L,
+      </autogen>
+    </item>
+    <item>
+      <name>Swap Esc and Tilde</name>
+      <identifier>private.swap_esc_and_tilde</identifier>
+      <autogen>__KeyToKey__ KeyCode::ESCAPE, KeyCode::BACKQUOTE</autogen>
+      <autogen>__KeyToKey__ KeyCode::BACKQUOTE, KeyCode::ESCAPE</autogen>
+    </item>
+</root>
+
+
+

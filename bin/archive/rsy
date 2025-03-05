@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+DEST=~/temp/pancam/
+ZIPDEST=~/Desktop/pancam.zip
+
+if [ -n "$1" ]; then
+  ZIPDEST="$1"
+  echo "$ZIPDEST"
+fi
+
+if [ -z $1 ]; then
+  echo "$ZIPDEST"
+fi
+
+rsync -vaiz --delete --exclude '.git/' --exclude 'neotest/test_output/*' --exclude '20140422_new_src_SD_boot/' --exclude '20140603_fw_May_29_2014/' --exclude 'Ambarella_Docs/' --exclude 'image_quality/' --exclude 'iqrelease/' --include '*.py' --include '*.bat' --include '*.asm' --include '*.h' --include '*.c' --include '*.cpp' --include '*.cc' --include '*.txt' --include '*.proto' --include '*.sh' --include '*/' --exclude '*' ~/dev/mac/pancam/hardware $DEST
+pushd $DEST/..
+zip -r $ZIPDEST pancam
+rm -rf $DEST
+popd
+
+#rsync -vaiz --delete --exclude '.git/' --exclude 'neotest/test_output' --exclude '20140422_new_src_SD_boot/' --exclude '20140603_fw_May_29_2014/' --exclude 'Ambarella_Docs/' --exclude 'image_quality/' --exclude 'iqrelease/' --include '*.py' --include '*.bat' --include '*.asm' --include '*.h' --include '*.c' --include '*.cpp' --include '*.cc' --include '*.txt' --include '*.proto' --include '*/' --exclude '*' ~/dev/mac/pancam/hardware /Volumes/UNTITLED/pancam/
+
+#rsync -arP --delete --exclude='*.o' --exclude '*.dep' --exclude '*.pbi' --exclude '*.cout' --exclude '*.lib' --exclude '*.bin' --exclude '*.devfw' --exclude '*.out' --exclude '*.fw' --exclude '*.exe' --exclude '*.pbd' --exclude '*.browse' --exclude '*.ubi' --exclude '*.e2b' --exclude='.git/' --exclude '20140422_new_src_SD_boot' --exclude '20140603_fw_May_29_2014' --exclude 'Ambarella_Docs' --exclude 'image_quality' --exclude 'iqrelease' ~/dev/mac/pancam/hardware /Volumes/UNTITLED/pancam/
+
+

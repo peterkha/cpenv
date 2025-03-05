@@ -1,0 +1,5 @@
+#
+#
+--roomsweeper_ignore_camera_serials=true
+--roomsweeper_disable_motor=true
+--camera_ignore_plug=true

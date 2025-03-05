@@ -1,0 +1,88 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" == "21-1" ]; then
+  imagedir=$amba21neo
+  targetname=AmbaSysFW.bin
+  targetnamemanual=AmbaSysFW.manual.bin
+elif [ "$1" == "21-2" ]; then
+  imagedir=$amba212neo
+  targetname=AmbaSysFW_21-2.bin
+  targetnamemanual=AmbaSysFW_21-2.manual.bin
+elif [ "$1" == "21-1uc" ]; then
+  imagedir=$amba21uc
+  targetname=AmbaSysFW_21-2.bin
+  targetnamemanual=AmbaSysFW_21-2.manual.bin
+elif [ "$1" == "21-2uc" ]; then
+  imagedir=$amba212uc
+  targetname=AmbaSysFW.bin
+  targetnamemanual=AmbaSysFW.manual.bin
+elif [ "$1" == "183" ]; then
+  imagedir=$amba183
+  targetname=AmbaSysFW_21-2.bin
+  targetnamemanual=AmbaSysFW_21-2.manual.bin
+else
+  echo "bad 1st arg (21-1, 21-2, 21-1uc, 21-2uc)"
+  exit 1
+fi
+
+if [ "$2" == "sys" ]; then
+  imagename=$sysfw
+elif [ "$2" == "sysdsp" ] ; then
+  imagename=$sysdsp
+elif [ "$2" == "bstsys" ] ; then
+  imagename=$bstsys
+elif [ "$2" == "image" ] ; then
+  echo "copying from existing file"
+else
+  echo "request sys sysdsp bstsys image (3rd arg) "
+  exit 1
+fi
+
+
+autoexec=""
+if [ "$3" == "auto" ]; then
+  echo "autoexec copy!"
+  autoexec="$HOME/Desktop/autoexec.ash"
+  fullpath=$imagedir/$imagename
+elif [ -z "$3" ]; then
+  fullpath=$imagedir/$imagename
+else
+  echo "specifying image $3"
+  fullpath="$3"
+fi
+
+if [ "$4" == "auto" ]; then
+  echo "autoexec copy!"
+  autoexec="$HOME/Desktop/autoexec.ash"
+fi
+
+echo copying $fullpath
+#ls -la $fullpath
+
+#cleancards;
+
+ls -d1 /Volumes/* | grep "NO NAME\|JAUNT_MEDIA" | while read f;
+do
+  f=$(echo "$f" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g")
+  echo fullpath $fullpath
+  cp -apf "$fullpath" "$f/$targetname" &
+  #cp -apf "$fullpath" "$f"/$targetnamemanual
+  if [ ! -z "$autoexec" ]; then
+    cp -apf "$autoexec" "$f/autoexec.ash"
+  fi
+  echo copied to $f
+done;
+wait
+
+sleep 3
+ls -la $fullpath
+
+ls -d1 /Volumes/* | grep "NO NAME\|JAUNT_MEDIA" | while read f;
+do
+  ls -la "$f"/$targetname
+done;
+
+
+exit 0
