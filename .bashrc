@@ -273,7 +273,7 @@ dit() {
 }
 
 gets() {
-    curl_camera.sh getState
+    curl_camera.sh getState | grep chargePercent
 }
 mchr() {
     MPOINT=/chroots/$(cat ~/.fwb_chroot)/root/mp_vision
@@ -364,7 +364,9 @@ shad() {
 }
 
 resub() {
+    gets
     echo "submit $(ls -1 ~/docker-zaya/dist/zaya*tar.gz | head -1)"
+    echo ""
     fw-update-wifi.sh "$(ls -1 ~/docker-zaya/dist/zaya*tar.gz | head -1)"
 }
 
@@ -399,13 +401,15 @@ sett() {
 }
 
 cat_idrsa() {
-    ssh zayawifi mkdir .ssh
-    if [ $? -ne 0 ]; then
-      ssh gammawifi mkdir .ssh
-      cat ~/.ssh/id_rsa.pub | ssh gammawifi tee -a .ssh/authorized_keys
-    else
-      cat ~/.ssh/id_rsa.pub | ssh zayawifi tee -a .ssh/authorized_keys
-    fi
+    ssh-copy-id -i ~/.ssh/id_rsa.pub zayawifi
+
+    #ssh zayawifi mkdir .ssh
+    #if [ $? -ne 0 ]; then
+    #  ssh gammawifi mkdir .ssh
+    #  cat ~/.ssh/id_rsa.pub | ssh gammawifi tee -a .ssh/authorized_keys
+    #else
+    #  cat ~/.ssh/id_rsa.pub | ssh zayawifi tee -a .ssh/authorized_keys
+    #fi
 }
 
 
@@ -417,4 +421,28 @@ git lfs install
 git lfs pull
 }
 
+sshusb() {
+    fw-update-usb.sh ~/dev/zaya_app/testrail/debug_enable/ssh_enable_SIGNED.tar.gz
+    ssh zayausb
+}
+
+fwupdbg() {
+    gets
+    fw-update-wifi.sh /media/psf/Home//Desktop/builds/debug_enable-heads_REL-1916*
+}
 alias gpgx='gpg -d testrail/matterport_pass.gpg  | xclip -selection clipboard'
+
+CAMERA_SERIAL=Q32510065
+
+alias ipeval='eval $($ZAP/testrail/ssid_ip_eval.sh $CAMERA_SERIAL)'
+
+sshen() {
+    gets
+    fw-update-wifi.sh /home/phahn/dev/testrail/debug_enable/ssh_enable_SIGNED.tar.gz
+}
+
+getcal() {
+    sshen
+    scp zayawifi:/mpconf/pro3_calibration.json .
+
+}

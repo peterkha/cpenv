@@ -1,15 +1,11 @@
 [core]
 	editor = vim
-[filter "lfs"]
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
 [user]
 	email = phahn@matterport.com
 	name = Peter Hahn
 [alias]
     co = checkout
+    ch = cherry-pick
     st = status -uno
     br = branch
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
@@ -23,6 +19,7 @@
     stsh = "!f() { git stash show stash@{$*} -p; }; f"
     stap = "!f() { git stash apply stash@{$*}; }; f"
     sync = "!f() { git fetch origin master:master; }; f"
+    diffc = diff --cached
 [push]
 	default = matching
 [merge]
@@ -53,3 +50,10 @@
 [mergetool "p4mergetool"]
 	cmd = /home/phahn/bin/p4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
 	trustExitCode = false
+[safe]
+	directory = /home/phahn/dev/zaya_app
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
